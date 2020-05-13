@@ -2,7 +2,9 @@
 
 This is experimental code for quantum mechanics, in order to be used for teaching purpose.
 
-Note that there is no specific library created, as that is a work in progress to ensure the functions are able to operate.
+The Pysces library created uses Sympy and Matplotlib libraries as a backend. This library is still in progress.
+
+Note that the "finalized" folder contains the latest code, but there is still a decent amount that needs to be refined within the code.
 
 Topics include:
 
