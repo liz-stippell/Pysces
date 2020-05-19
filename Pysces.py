@@ -450,10 +450,11 @@ The Laguerre polynomial. This is commonly used to solve the LAGUERRE_ASSOC() fun
 
 """
 
-
+def LAGUERRE_2(r, n):
+    return (exp(r)*Derivative(exp(-r)*(r**n), (r, n)))
 
 def LAGUERRE_ASSOC(n, l):
-    return ((-1)**l)*Derivative(LAGUERRE(r, n+l), (r, l))
+    return (((-1)**l)*Derivative(LAGUERRE_2(r, n+l), (r, l)).doit())
 """
 
 Parameters:
