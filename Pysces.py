@@ -452,7 +452,7 @@ The Laguerre polynomial. This is commonly used to solve the LAGUERRE_ASSOC() fun
 
 
 def LAGUERRE_ASSOC(n, l):
-    return ((-1)**l)*Derivative(Laguerre(r, n+l), (r, l))
+    return ((-1)**l)*Derivative(LAGUERRE(r, n+l), (r, l))
 """
 
 Parameters:
@@ -469,7 +469,7 @@ The Laguerre Associated polynomial, commonly used to solve the RADIAL() function
 
 
 def RADIAL(n, l):
-    return (r**l)*Laguerre_Assoc(n, l)*exp((-Z/n)*r)
+    return (r**l)*LAGUERRE_ASSOC(n, l)*exp((-Z/n)*r)
 """
 
 Parameters:
