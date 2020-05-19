@@ -193,6 +193,7 @@ Note that if there are multiplte commutators, the FACTOR_COMM() functions can be
 
 def OP(x):
     return Operator(x)
+
 """
 
 Parameters:
