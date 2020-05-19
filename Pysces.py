@@ -436,7 +436,7 @@ Note that the cell often has to be run TWICE in order to print the plot/graph.
 
 
 def LAGUERRE(r, n):
-    return (exp(r)*Derivative(exp(-r)*(r**n), (r, n)))
+    return simplify((exp(r)*Derivative(exp(-r)*(r**n), (r, n))).doit())
 """
 
 Parameters:
