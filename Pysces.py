@@ -450,11 +450,27 @@ The Laguerre polynomial. This is commonly used to solve the LAGUERRE_ASSOC() fun
 
 """
 
+
+
 def LAGUERRE_2(r, n):
     return (exp(r)*Derivative(exp(-r)*(r**n), (r, n)))
+"""
+
+Parameters:
+
+r: What the equation is with respect to. This is commonly "r" or "x"
+n: The principle Quantum Number
+
+Returns:
+
+The Laguerre polynomial, without simplification and without the derivative computed.
+
+"""
+
+
 
 def LAGUERRE_ASSOC(n, l):
-    return (((-1)**l)*Derivative(LAGUERRE_2(r, n+l), (r, l)).doit())
+    return simplify(((-1)**l)*Derivative(LAGUERRE_2(r, n+l), (r, l)).doit())
 """
 
 Parameters:
