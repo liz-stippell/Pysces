@@ -11,13 +11,12 @@ from sympy.plotting import *
 from sympy import init_printing
 init_printing() 
 
-a, b, c, d, e, f, g, h, h_b, j, k, l, m, n, p, p_x, p_y, p_z, x, y, z, alpha, omega = symbols("a, b, c, d, e, f, g, h, h_b, j, k, l, m, n, p, p_x, p_y, p_z, x, y, z, alpha, omega")
 
 """ The above are a list of commonly used variables for the Pysces library. """
 
 
 def COMM_1(A, B, f):
-    return expand((Commutator(A, B)*f).doit())
+    return expand((Commutator(Operator(A), Operator(B))*f).doit())
 """
 
 This function is not used directly, it is only used in the COMM() function below. 
@@ -38,11 +37,11 @@ The commutator of A and B with respect to F(x).
 
 def COMM(x, y, a, b = None):
             if b == None:
-                return COMM_1(OP(x), OP(y), a)
+                return COMM_1(Operator(x), Operator(y), a)
             elif b == 0:
-                return Commutator(OP(x), OP(a)) + Commutator(OP(y), OP(a))
+                return Commutator(Operator(x), Operator(a)) + Commutator(Operator(y), Operator(a))
             else:       
-                return Commutator(OP(x), OP(a)) - Commutator(OP(x), OP(b)) + Commutator(OP(y), OP(a)) + Commutator(OP(y), OP(b))
+                return Commutator(Operator(x), Operator(a)) - Commutator(Operator(x), Operator(b)) + Commutator(Operator(y), Operator(a)) + Commutator(Operator(y), Operator(b))
 """
 
 This function has a few different outputs, depending on the parameters.
@@ -67,57 +66,58 @@ Else, [x, a] - [x, b] + [y, a] + [y, b] would be returned, such as the case of [
 
 
 def FACTOR_COMM(A, B, C, D):
+    x, y, z, p_x, p_y, p_z = symbols("x y z p_x p_y p_z")
     if A == p_y and C == y:
-        return (OP(B)*OP(D)*Commutator(OP(A), OP(C)) )
+        return (Operator(B)*Operator(D)*Commutator(Operator(A), Operator(C)) )
     if A == y and C == p_y:
-        return (OP(B)*OP(D)*Commutator(OP(A), OP(C)) )
+        return (Operator(B)*Operator(D)*Commutator(Operator(A), Operator(C)) )
     if A == p_x and C == x:
-        return (OP(B)*OP(D)*Commutator(OP(A), OP(C)) )
+        return (Operator(B)*Operator(D)*Commutator(Operator(A), Operator(C)) )
     if A == x and C == p_x:
-        return( OP(B)*OP(D)*Commutator(OP(A), OP(C)) )
+        return (Operator(B)*Operator(D)*Commutator(Operator(A), Operator(C)) )
     if A == p_z and C == z:
-        return( OP(B)*OP(D)*Commutator(OP(A), OP(C)) )
+        return (Operator(B)*Operator(D)*Commutator(Operator(A), Operator(C)) )
     if A == z and C == p_z:
-        return( OP(B)*OP(D)*Commutator(OP(A), OP(C)) )
+        return (Operator(B)*Operator(D)*Commutator(Operator(A), Operator(C)) )
         
     if A == p_y and D == y:
-        return( OP(B)*OP(C)*Commutator(OP(A), OP(D)) )
+        return( Operator(B)*Operator(C)*Commutator(Operator(A), Operator(D)) )
     if A == y and D == p_y:
-        return( OP(B)*OP(C)*Commutator(OP(A), OP(D)) )
+        return( Operator(B)*Operator(C)*Commutator(Operator(A), Operator(D)) )
     if A == p_x and D == x:
-        return( OP(B)*OP(C)*Commutator(OP(A), OP(D)) )
+        return( Operator(B)*Operator(C)*Commutator(Operator(A), Operator(D)) )
     if A == x and D == p_x:
-        return( OP(B)*OP(C)*Commutator(OP(A), OP(D)) )
+        return( Operator(B)*Operator(C)*Commutator(Operator(A), Operator(D)) )
     if A == p_z and D == z:
-        return( OP(B)*OP(C)*Commutator(OP(A), OP(D)) )
+        return( Operator(B)*Operator(C)*Commutator(Operator(A), Operator(D)) )
     if A == z and D == p_z:
-        return( OP(B)*OP(C)*Commutator(OP(A), OP(D)) )
+        return( Operator(B)*Operator(C)*Commutator(Operator(A), Operator(D)) )
    
     if B == p_y and C == y:
-         return( OP(A)*OP(D)*Commutator(OP(B), OP(C)) )
+         return( Operator(A)*Operator(D)*Commutator(Operator(B), Operator(C)) )
     if B == y and C == p_y:
-         return( OP(A)*OP(D)*Commutator(OP(B), OP(C)) )
+         return( Operator(A)*Operator(D)*Commutator(Operator(B), Operator(C)) )
     if B == p_x and C == x:
-         return( OP(A)*OP(D)*Commutator(OP(B), OP(C)) )
+         return( Operator(A)*Operator(D)*Commutator(Operator(B), Operator(C)) )
     if B == x and C == p_x:
-         return( OP(A)*OP(D)*Commutator(OP(B), OP(C)) )
+         return( Operator(A)*Operator(D)*Commutator(Operator(B), Operator(C)) )
     if B == p_z and C == z:
-         return( OP(A)*OP(D)*Commutator(OP(B), OP(C)) )
+         return( Operator(A)*Operator(D)*Commutator(Operator(B), Operator(C)) )
     if B == z and C == p_z:
-          return( OP(A)*OP(D)*Commutator(OP(B), OP(C)) )
+         return( Operator(A)*Operator(D)*Commutator(Operator(B), Operator(C)) )
     
     if B == p_y and D == y:
-        return(OP(A)*OP(C)*Commutator(OP(B), OP(D)))
+        return(Operator(A)*Operator(C)*Commutator(Operator(B), Operator(D)))
     if B == y and D == p_y:
-        return(OP(A)*OP(C)*Commutator(OP(B), OP(D)))
+        return(Operator(A)*Operator(C)*Commutator(Operator(B), Operator(D)))
     if B == p_x and D == x:
-        return(OP(A)*OP(C)*Commutator(OP(B), OP(D)))
+        return(Operator(A)*Operator(C)*Commutator(Operator(B), Operator(D)))
     if B == x and D == p_x:
-        return(OP(A)*OP(C)*Commutator(OP(B), OP(D)))
+        return(Operator(A)*Operator(C)*Commutator(Operator(B), Operator(D)))
     if B == p_z and D == z:
-         return(OP(A)*OP(C)*Commutator(OP(B), OP(D)))
+        return(Operator(A)*Operator(C)*Commutator(Operator(B), Operator(D)))
     if B == z and D == p_z:
-          return(OP(A)*OP(C)*Commutator(OP(B), OP(D)))
+         return(Operator(A)*Operator(C)*Commutator(Operator(B), Operator(D)))
 
     if A == y and C == y:
         return 0
@@ -191,24 +191,8 @@ Note that if there are multiplte commutators, the FACTOR_COMM() functions can be
 
 
 
-def OP(x):
-    return Operator(x)
-
-"""
-
-Parameters:
-
-x: what the position operator is with respect to.
-
-Returns:
-
-The chosen parameter as an operator. Example: OP(y) will return "y"
-
-"""
-
-
-
-def P_OP(x):
+def P_OPERATOR(x):
+    h_b, m = symbols("h_b m")
     return Operator(-I*h_b*(Derivative("1", x)))
 """
 
@@ -228,7 +212,8 @@ Note that the "1" in the derivative is a placeholder, which will be manually rep
 
 
 def HAMILTONIAN(x):
-    return P_OP(x)*(1/(2*m))
+    h_b, m = symbols("h_b m")
+    return P_OPERATOR(x)*(1/(2*m))
 """
 
 This is subject to change.
@@ -291,6 +276,7 @@ This simply returns "F(x)", x being with chosen parameter.
 
 
 def HO():
+    p, k, m, x = symbols("p k m x")
     return (p**2)/(2*m) + (1/2)*k*(x**2)
 """
 
@@ -307,6 +293,7 @@ The Harmonic Oscillator Hamiltonian. Note that "p" is the linear momentum operat
 
 
 def PLANEWAVE(x):
+    k, omega, t = symbols("k omega t")
     return exp(I*(k*x-omega*t))
 """
 
