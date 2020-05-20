@@ -193,6 +193,7 @@ Note that if there are multiplte commutators, the FACTOR_COMM() functions can be
 
 def OP(x):
     return Operator(x)
+
 """
 
 Parameters:
@@ -435,7 +436,7 @@ Note that the cell often has to be run TWICE in order to print the plot/graph.
 
 
 def LAGUERRE(r, n):
-    return (exp(r)*Derivative(exp(-r)*(r**n), (r, n)))
+    return simplify((exp(r)*Derivative(exp(-r)*(r**n), (r, n))).doit())
 """
 
 Parameters:
@@ -451,8 +452,25 @@ The Laguerre polynomial. This is commonly used to solve the LAGUERRE_ASSOC() fun
 
 
 
+def LAGUERRE_2(r, n):
+    return (exp(r)*Derivative(exp(-r)*(r**n), (r, n)))
+"""
+
+Parameters:
+
+r: What the equation is with respect to. This is commonly "r" or "x"
+n: The principle Quantum Number
+
+Returns:
+
+The Laguerre polynomial, without simplification and without the derivative computed.
+
+"""
+
+
+
 def LAGUERRE_ASSOC(n, l):
-    return ((-1)**l)*Derivative(Laguerre(r, n+l), (r, l))
+    return simplify(((-1)**l)*Derivative(LAGUERRE_2(r, n+l), (r, l)).doit())
 """
 
 Parameters:
@@ -466,22 +484,6 @@ The Laguerre Associated polynomial, commonly used to solve the RADIAL() function
 
 """
 
-
-
-def RADIAL(n, l):
-    return (r**l)*Laguerre_Assoc(n, l)*exp((-Z/n)*r)
-"""
-
-Parameters:
-
-n: The principle Quantum Number
-l: The angular momentum Quantum Number
-
-Returns:
-
-The Radial solution, which describes atomic orbitals in hydrogen-like orbitals.
-
-"""
 
 
 
