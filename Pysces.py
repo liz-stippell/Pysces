@@ -119,56 +119,13 @@ def FACTOR_COMM(A, B, C, D):
     if B == z and D == p_z:
          return(Operator(A)*Operator(C)*Commutator(Operator(B), Operator(D)))
 
-    if A == y and C == y:
+    if A == C:
         return 0
-    if A == p_y and C == p_y:
+    if A == D:
         return 0
-    if A == x and C == x:
-        return 0
-    if A == p_x and C == p_x:
-        return 0
-    if A == z and C == z:
-        return 0
-    if A == p_z and C == p_z: 
-        return 0
-    
-    if A == y and D == y:
-        return 0
-    if A == p_y and D == p_y:
+    if B == C:
          return 0
-    if A == x and D == x:
-         return 0
-    if A == p_x and D == p_x:
-         return 0
-    if A == z and D == z:
-        return 0
-    if A == p_z and D == p_z:
-         return 0
-        
-    if B == y and C == y:
-         return 0
-    if B == p_y and C == p_y:
-         return 0
-    if B == x and C == x:
-         return 0
-    if B == p_x and C == p_x:
-         return 0
-    if B == z and C == z:
-         return 0
-    if B == p_z and C == p_z:
-         return 0
-    
-    if B == y and D == y:
-        return 0
-    if B == p_y and D == p_y:
-        return 0
-    if B == x and D == x:
-        return 0
-    if B == p_x and D == p_x:
-        return 0
-    if B == z and D == z:
-        return 0
-    if B == p_z and D == p_z:
+    if B == D:
         return 0
 """
 
