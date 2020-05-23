@@ -154,7 +154,7 @@ def FACTOR_COMM(A, B, C, D):
 
 
 
-def P_OPERATOR(x):
+def P_OPERATOR(A = None):
     """
 
     Parameters:
@@ -164,19 +164,22 @@ def P_OPERATOR(x):
     Returns:
 
     The linear momentum operator, with respect to the parameter.
-
-    Note that this equation is included in the Hamiltonian() function. 
-    Note that the "1" in the derivative is a placeholder, which will be manually replaced.
+ 
+    Note that the "1" in the derivative is a placeholder, which will be replaced.
+    If A == None, the general linear operator is printed, with all three positional arguments "x", "y", and "z"
 
     """
     
     h_b, m = symbols("h_b m")
-    return Operator(-I*h_b*(Derivative("1", x)))
+    if A == None:
+        return Operator(-I*h_b*(Derivative("1", x))) + Operator(-I*h_b*(Derivative("1", y))) + Operator(-I*h_b*(Derivative("1", z)))
+    else:
+        return Operator(-I*h_b*(Derivative("1", A)))
 
 
 
 
-def KINETIC_ENERGY(x):
+def KINETIC_ENERGY(A = None):
     """
 
     Parameters:
@@ -187,14 +190,50 @@ def KINETIC_ENERGY(x):
 
     The kinetic energy operator, with respect to the chosen parameter. 
 
-    Note that (-(h_b)**2)*Derivative("1", x, x) == P_OP(x)**2
-    Note that the "1" in the derivative is a placeholder, which will be manually replaced.
+    Note that the "1" in the derivative is a placeholder, which will be replaced.
+    If A == None, the general linear operator is printed, with all three positional arguments "x", "y", and "z"
 
     """
     
     h_b, m = symbols("h_b m")
-    return (Operator((-I*h_b*(Derivative("1", x)))**2)*(1/(2*m)))
+    if A == None:
+        return (Operator((-I*h_b*(Derivative("1", x)))**2)*(1/(2*m))) + (Operator((-I*h_b*(Derivative("1", y)))**2)*(1/(2*m))) + (Operator((-I*h_b*(Derivative("1", z)))**2)*(1/(2*m)))
+    else:
+        return (Operator((-I*h_b*(Derivative("1", A)))**2)*(1/(2*m)))
 
+
+
+def V(x):
+    """
+    
+    Parameters:
+    
+    x: The variable for the given function. This is usually "x", "y" or "z".
+    
+    Returns:
+    
+    The general potential energy operator, V(x)
+    
+    """
+    
+    return Operator(Function("V")(x))
+
+
+
+def HAMILTONIAN(A):
+    """
+    
+    Parameters:
+    
+    A: The variable for the given function. This is usually "x", "y" or "z".
+    
+    Returns:
+    
+    The Hamiltonian operator, made up of the kinetic energy operator and the general potential energy operator.
+    
+    """
+    
+    return KINETIC_ENERGY(A) + V(A)
 
 
 
@@ -377,7 +416,7 @@ def EXPECTATION(A, B, x, y, z):
 
     """
     
-        if B == KINETIC_ENERGY(x):
+    if B == KINETIC_ENERGY(x):
         return sympify(str(sympify(str(Integral(CONJUGATE(A)*B, (x, y, z))).replace(str(Derivative("1", x)**2), str(Derivative(A, x, x)))).doit()).replace(str('sin(pi*n)'), str(0)).replace(str('cos(pi*n)'), str(0)))
     if B == P_OPERATOR(x):
         return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", x), Derivative(A, x).doit())
