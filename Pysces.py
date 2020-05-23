@@ -168,9 +168,9 @@ Note that the "1" in the derivative is a placeholder, which will be manually rep
 
 
 
-def HAMILTONIAN(x):
+def KINETIC_ENERGY(x):
     h_b, m = symbols("h_b m")
-    return P_OPERATOR(x)*(1/(2*m))
+    return (Operator((-I*h_b*(Derivative("1", x)))**2)*(1/(2*m)))
 """
 
 This is subject to change.
@@ -338,7 +338,24 @@ The normalization constant, with respect to the given parameters. To find the no
 
 
 def EXPECTATION(A, B, x, y, z):
-    return Integral(A*B*CONJUGATE(A), (x, y, z))
+    
+    if B == KINETIC_ENERGY(x):
+        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", x), Derivative(A, x).doit())
+    if B == P_OPERATOR(x):
+        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", x), Derivative(A, x).doit())
+    
+    if B == KINETIC_ENERGY(y):
+        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", y), Derivative(A, y).doit())
+    if B == P_OPERATOR(y):
+        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", y), Derivative(A, y).doit())
+    
+    if B == KINETIC_ENERGY(z):
+        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", z), Derivative(A, z).doit())
+    if B == P_OPERATOR(z):
+        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", z), Derivative(A, z).doit())
+    
+    else:
+        return Integral(CONJUGATE(A)*B*A, (x, y, z))
 """
 
 Parameters:
