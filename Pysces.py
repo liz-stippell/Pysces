@@ -378,17 +378,17 @@ def EXPECTATION(A, B, x, y, z):
     """
     
     if B == KINETIC_ENERGY(x):
-        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", x), Derivative(A, x).doit())
+        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", x)**2, Derivative(A, x, x).doit())
     if B == P_OPERATOR(x):
         return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", x), Derivative(A, x).doit())
     
     if B == KINETIC_ENERGY(y):
-        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", y), Derivative(A, y).doit())
+        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", y)**2, Derivative(A, y, y).doit())
     if B == P_OPERATOR(y):
         return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", y), Derivative(A, y).doit())
     
     if B == KINETIC_ENERGY(z):
-        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", z), Derivative(A, z).doit())
+        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", z)**2, Derivative(A, z, z).doit())
     if B == P_OPERATOR(z):
         return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", z), Derivative(A, z).doit())
     
