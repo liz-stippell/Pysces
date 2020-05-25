@@ -418,18 +418,8 @@ def EXPECTATION(A, B, x, y, z):
     
     if B == KINETIC_ENERGY(x):
         return sympify(str(sympify(str(Integral(CONJUGATE(A)*B, (x, y, z))).replace(str(Derivative("1", x)**2), str(Derivative(A, x, x)))).doit()).replace(str('sin(pi*n)'), str(0)).replace(str('cos(pi*n)'), str(0)))
-    if B == P_OPERATOR(x):
+    elif B == P_OPERATOR(x):
         return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", x), Derivative(A, x).doit())
-    
-    if B == KINETIC_ENERGY(y):
-        return sympify(str(sympify(str(Integral(CONJUGATE(A)*B, (x, y, z))).replace(str(Derivative("1", y)**2), str(Derivative(A, y, y)))).doit()).replace(str('sin(pi*n)'), str(0)).replace(str('cos(pi*n)'), str(0)))
-    if B == P_OPERATOR(y):
-        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", y), Derivative(A, y).doit())
-    
-    if B == KINETIC_ENERGY(z):
-        return sympify(str(sympify(str(Integral(CONJUGATE(A)*B, (x, y, z))).replace(str(Derivative("1", z)**2), str(Derivative(A, z, z)))).doit()).replace(str('sin(pi*n)'), str(0)).replace(str('cos(pi*n)'), str(0)))
-    if B == P_OPERATOR(z):
-        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", z), Derivative(A, z).doit())
     
     else:
         return Integral(CONJUGATE(A)*B*A, (x, y, z))
