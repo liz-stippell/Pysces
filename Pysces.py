@@ -12,10 +12,10 @@ from sympy import init_printing
 init_printing() 
 
 
-""" The above are a list of commonly used variables for the Pysces library. """
+I = sqrt(-1)
 
 
-def COMM_1(A, B, f):
+def comm_1(A, B, f):
     """
 
     This function is not used directly, it is only used in the COMM() function below. 
@@ -37,7 +37,7 @@ def COMM_1(A, B, f):
 
 
 
-def COMM(x, y, a, b = None):
+def comm(x, y, a, b = None):
     """
 
     This function has a few different outputs, depending on the parameters.
@@ -61,7 +61,7 @@ def COMM(x, y, a, b = None):
     """
     
     if b == None:
-        return COMM_1(Operator(x), Operator(y), a)
+        return comm_1(Operator(x), Operator(y), a)
     elif b == 0:
         return Commutator(Operator(x), Operator(a)) + Commutator(Operator(y), Operator(a))
     else:       
@@ -70,7 +70,7 @@ def COMM(x, y, a, b = None):
 
 
 
-def FACTOR_COMM(A, B, C, D):
+def factor_comm(A, B, C, D):
     """
 
     Parameters:
@@ -154,7 +154,7 @@ def FACTOR_COMM(A, B, C, D):
 
 
 
-def P_OPERATOR(A = None):
+def p_operator(A = None):
     """
 
     Parameters:
@@ -179,7 +179,7 @@ def P_OPERATOR(A = None):
 
 
 
-def KINETIC_ENERGY(A = None):
+def kinetic_energy(A = None):
     """
 
     Parameters:
@@ -203,7 +203,7 @@ def KINETIC_ENERGY(A = None):
 
 
 
-def V(x):
+def v(x):
     """
     
     Parameters:
@@ -216,11 +216,11 @@ def V(x):
     
     """
     
-    return Operator(Function("V")(x))
+    return Operator(Function("v")(x))
 
 
 
-def HAMILTONIAN(A):
+def hamiltonian(A):
     """
     
     Parameters:
@@ -233,11 +233,11 @@ def HAMILTONIAN(A):
     
     """
     
-    return KINETIC_ENERGY(A) + V(A)
+    return kinetic_energy(A) + v(A)
 
 
 
-def EXPRESSION_REPLACE(R, K):
+def expression_replace(R, K):
     """
 
     Parameters:
@@ -258,25 +258,25 @@ def EXPRESSION_REPLACE(R, K):
     L_x, L_z, L_y, p_x, p_y, p_z, x, y, z = symbols("L_x, L_z, L_y, p_x, p_y, p_z, x, y, z")
     
     if str('[p_x,x]') in str(R):
-        return sympify(str(sympify(str(R).replace(str('[p_x,x]'), str(EXPRESSION_REPLACE(COMM(P_OPERATOR(K), Operator(K), F(K)), K))))).replace(str(p_y*z - p_z*y), str(-L_x)))
+        return sympify(str(sympify(str(R).replace(str('[p_x,x]'), str(expression_replace(comm(p_operator(K), Operator(K), f(K)), K))))).replace(str(p_y*z - p_z*y), str(-L_x)))
     if K == x:
-        return sympify(str(R).replace(str(Derivative(1, K)*F(K)), str(Derivative(F(K), K).doit())).replace(str('Derivative(1, x)*x*F(x)'), str(Derivative(K*F(K), K).doit())))
+        return sympify(str(R).replace(str(Derivative(1, K)*f(K)), str(Derivative(f(K), K).doit())).replace(str('Derivative(1, x)*x*f(x)'), str(Derivative(K*f(K), K).doit())))
     
     if str('[p_y, y]') in str(R):
-        return sympify(str(sympify(str(R).replace(str('[p_y,y]'), str(EXPRESSION_REPLACE(COMM(P_OPERATOR(K), Operator(K), F(K)), K))))).replace(str(p_x*z - p_z*x), str(-L_y)))
+        return sympify(str(sympify(str(R).replace(str('[p_y,y]'), str(expression_replace(comm(p_operator(K), Operator(K), f(K)), K))))).replace(str(p_x*z - p_z*x), str(-L_y)))
     if K == y:
-        return sympify(str(R).replace(str(Derivative(1, K)*F(K)), str(Derivative(F(K), K).doit())).replace(str('Derivative(1, y)*y*F(y)'), str(Derivative(K*F(K), K).doit())))
+        return sympify(str(R).replace(str(Derivative(1, K)*f(K)), str(Derivative(f(K), K).doit())).replace(str('Derivative(1, y)*y*f(y)'), str(Derivative(K*f(K), K).doit())))
     
     if str('[p_z,z]') in str(R):
-        return sympify(str(sympify(str(R).replace(str('[p_z,z]'), str(EXPRESSION_REPLACE(COMM(P_OPERATOR(K), Operator(K), F(K)), K))))).replace(str(p_x*y - p_y*x), str(-L_z)))
+        return sympify(str(sympify(str(R).replace(str('[p_z,z]'), str(expression_replace(comm(p_operator(K), Operator(K), f(K)), K))))).replace(str(p_x*y - p_y*x), str(-L_z)))
     elif K == z:
-        return sympify(str(R).replace(str(Derivative(1, K)*F(K)), str(Derivative(F(K), K).doit())).replace(str('Derivative(1, z)*z*F(z)'), str(Derivative(K*F(K), K).doit())))
+        return sympify(str(R).replace(str(Derivative(1, K)*f(K)), str(Derivative(f(K), K).doit())).replace(str('Derivative(1, z)*z*f(z)'), str(Derivative(K*f(K), K).doit())))
 
 
 
 
 
-def F(x):
+def f(x):
     """
 
     Parameters:
@@ -290,7 +290,7 @@ def F(x):
 
     """
     
-    return Operator(Function('F')(x))
+    return Operator(Function('f')(x))
 
 
 
@@ -314,7 +314,7 @@ def HO():
 
 
 
-def PLANEWAVE(x):
+def planewave(x):
     """
 
     Parameters:
@@ -352,7 +352,7 @@ def PIB(x, L, n):
 
 
 
-def PIB_NORMALIZE(x, L, n):
+def PIB_normalize(x, L, n):
     """
 
     Parameters:
@@ -372,7 +372,7 @@ def PIB_NORMALIZE(x, L, n):
 
 
 
-def CONJUGATE(x):
+def conjugate(x):
     """
 
     Parameters:
@@ -390,7 +390,7 @@ def CONJUGATE(x):
 
 
 
-def NORMALIZE(A, x, y, z):
+def normalize_constant(A, x, y, z):
     """
 
     Parameters:
@@ -406,12 +406,12 @@ def NORMALIZE(A, x, y, z):
 
     """
     
-    return 1/sqrt(Integral(A*CONJUGATE(A), (x, y, z)))
+    return 1/sqrt(Integral(A*conjugate(A), (x, y, z)))
 
 
 
 
-def EXPECTATION(A, B, x, y, z):
+def expectation_value(A, B, x, y, z):
     """
 
     Parameters:
@@ -428,18 +428,18 @@ def EXPECTATION(A, B, x, y, z):
 
     """
     
-    if B == KINETIC_ENERGY(x):
-        return sympify(str(sympify(str(Integral(CONJUGATE(A)*B, (x, y, z))).replace(str(Derivative("1", x)**2), str(Derivative(A, x, x)))).doit()).replace(str('sin(pi*n)'), str(0)).replace(str('cos(pi*n)'), str(0)))
-    elif B == P_OPERATOR(x):
-        return Integral(CONJUGATE(A)*B, (x, y, z)).replace(Derivative("1", x), Derivative(A, x).doit())
+    if B == kinetic_energy(x):
+        return sympify(str(sympify(str(Integral(conjugate(A)*B, (x, y, z))).replace(str(Derivative("1", x)**2), str(Derivative(A, x, x)))).doit()).replace(str('sin(pi*n)'), str(0)).replace(str('cos(pi*n)'), str(0)))
+    elif B == p_operator(x):
+        return Integral(conjugate(A)*B, (x, y, z)).replace(Derivative("1", x), Derivative(A, x).doit())
     
     else:
-        return Integral(CONJUGATE(A)*B*A, (x, y, z))
+        return Integral(conjugate(A)*B*A, (x, y, z))
 
 
 
 
-def PLOT(A, B, C, D):
+def plot_function(A, B, C, D):
     """
 
     Parameters:
@@ -463,7 +463,7 @@ def PLOT(A, B, C, D):
 
 
 
-def LAGUERRE(r, n):
+def laguerre(r, n):
     """
 
     Parameters:
@@ -482,7 +482,7 @@ def LAGUERRE(r, n):
 
 
 
-def LAGUERRE_2(r, n):
+def laguerre_2(r, n):
     """
 
     Parameters:
@@ -501,7 +501,7 @@ def LAGUERRE_2(r, n):
 
 
 
-def LAGUERRE_ASSOC(n, l):
+def laguerre_assoc(n, l):
     """
 
     Parameters:
@@ -515,7 +515,7 @@ def LAGUERRE_ASSOC(n, l):
 
     """
     
-    return simplify(((-1)**l)*Derivative(LAGUERRE_2(r, n+l), (r, l)).doit())
+    return simplify(((-1)**l)*Derivative(laguerre_2(r, n+l), (r, l)).doit())
 
 
 
