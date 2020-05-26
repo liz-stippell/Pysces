@@ -249,17 +249,29 @@ def EXPRESSION_REPLACE(R, K):
 
     This replaces the Derivative(1, x) present in the expanded commutator with either Derivative(F(x), x) or Derivative(x*F(x), x).
     Note that the above states "x", but can be done for x, y, or z variables.
+    This will also replace [p_x, x] and similar commutators, which are usually computed when using angular momentum operators or similar operators.
     Note that the R parameter is a str()
 
 
     """
     
+    L_x, L_z, L_y, p_x, p_y, p_z, x, y, z = symbols("L_x, L_z, L_y, p_x, p_y, p_z, x, y, z")
+    
+    if str('[p_x,x]') in str(R):
+        return sympify(str(sympify(str(R).replace(str('[p_x,x]'), str(EXPRESSION_REPLACE(COMM(P_OPERATOR(K), Operator(K), F(K)), K))))).replace(str(p_y*z - p_z*y), str(-L_x)))
     if K == x:
         return sympify(str(R).replace(str(Derivative(1, K)*F(K)), str(Derivative(F(K), K).doit())).replace(str('Derivative(1, x)*x*F(x)'), str(Derivative(K*F(K), K).doit())))
+    
+    if str('[p_y, y]') in str(R):
+        return sympify(str(sympify(str(R).replace(str('[p_y,y]'), str(EXPRESSION_REPLACE(COMM(P_OPERATOR(K), Operator(K), F(K)), K))))).replace(str(p_x*z - p_z*x), str(-L_y)))
     if K == y:
         return sympify(str(R).replace(str(Derivative(1, K)*F(K)), str(Derivative(F(K), K).doit())).replace(str('Derivative(1, y)*y*F(y)'), str(Derivative(K*F(K), K).doit())))
-    if K == z:
+    
+    if str('[p_z,z]') in str(R):
+        return sympify(str(sympify(str(R).replace(str('[p_z,z]'), str(EXPRESSION_REPLACE(COMM(P_OPERATOR(K), Operator(K), F(K)), K))))).replace(str(p_x*y - p_y*x), str(-L_z)))
+    elif K == z:
         return sympify(str(R).replace(str(Derivative(1, K)*F(K)), str(Derivative(F(K), K).doit())).replace(str('Derivative(1, z)*z*F(z)'), str(Derivative(K*F(K), K).doit())))
+
 
 
 
