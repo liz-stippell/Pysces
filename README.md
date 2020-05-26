@@ -1,4 +1,4 @@
-# liz-stippell
+# Pysces
 
 This is experimental code for quantum mechanics, in order to be used for teaching purpose.
 
