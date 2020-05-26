@@ -519,6 +519,25 @@ def laguerre_assoc(n, l):
 
 
 
+def kronecker(i, j):
+    """
+    
+    Parameters:
+    
+    i: this is usually "i" and the first variable of the kronecker delta.
+    j: this is usually given a numerical value, and is the second variable of the kronecker delta.
+    
+    Returns:
+    
+    This function does not print anything, but instead is used in conjunction with the code found in the kronecker_delta file on:
+    https://github.com/liz-stippell/Pysces
+    
+    """
+    if i == j:
+        return 1
+    else:
+        return 0
+
 
 
 # In[ ]:
