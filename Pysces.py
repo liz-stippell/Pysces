@@ -372,6 +372,28 @@ def PIB_normalize(x, L, n):
 
 
 
+def gaussian_normalize(alpha, gamma, x_0, p_0):
+    """
+    
+    Parameters:
+    
+    alpha: alpha parameter of the normalized gaussian
+    gamma: gamma parameter of the normalized gaussian
+    x_0: x_0 parameter of the normalized gaussian
+    p_0: p_0 parameter of the normalized gaussian
+    
+    Returns:
+    
+    The normalized gaussian WaveFunction, with respect to the chosen variables.
+    
+    """
+    
+    alpha, gamma, x, x_0, p_0, h_b = symbols("alpha gamma x x_0 p_0 h_b")
+    return ((2*alpha)/pi)**(1/4) * exp(-alpha*(x - x_0)**2 + ((I*p_0)/h_b)*(x - x_0) + (I*gamma)/h_b)
+
+
+
+
 def conjugate(x):
     """
 
@@ -411,16 +433,33 @@ def normalize_constant(A, x, y, z):
 
 
 
-def expectation_value(A, B, x, y, z):
+def expectation_value(A, B, x, y, z, C = None):
     """
 
     Parameters:
-
+    
+    if C == None:
+    
     A: The normalized WaveFunction/expression of interest
     B: The operator of interest.
     x: What the integral is taken with respect to
     y: The lower bound of the integral. If bounds are not listed, this is -oo
     z: The upper bound of the integral. If bounds are not listed, this is oo
+    
+    if C is a value:
+    
+    A: The "bra" normalized WaveFunction
+    B: The operator of interest
+    x: The "ket" normalized WaveFunction
+    y: What the integral is taken with respect to
+    z: The lower bound of the integral. If bounds are not listed, this is -oo
+    C: The upper bound of the integral. If bounds are not listed, this is oo
+    
+    For reference:
+    <bra|
+    |ket>
+    so:
+    <A|B|x>
 
     Returns:
 
@@ -428,13 +467,43 @@ def expectation_value(A, B, x, y, z):
 
     """
     
-    if B == kinetic_energy(x):
-        return sympify(str(sympify(str(Integral(conjugate(A)*B, (x, y, z))).replace(str(Derivative("1", x)**2), str(Derivative(A, x, x)))).doit()).replace(str('sin(pi*n)'), str(0)).replace(str('cos(pi*n)'), str(0)))
-    elif B == p_operator(x):
-        return Integral(conjugate(A)*B, (x, y, z)).replace(Derivative("1", x), Derivative(A, x).doit())
+    if C == None:
+        if B == kinetic_energy(x):
+            return sympify(str(sympify(str(Integral(conjugate(A)*B, (x, y, z))).replace(str(Derivative("1", x)**2), str(Derivative(A, x, x)))).doit()).replace(str('sin(pi*n)'), str(0)).replace(str('cos(pi*n)'), str(0)))
+        if B == p_operator(x):
+            return Integral(conjugate(A)*B, (x, y, z)).replace(Derivative("1", x), Derivative(A, x).doit()) 
+        return Integral(conjugate(A)*B*A, (x, y, z))
     
     else:
-        return Integral(conjugate(A)*B*A, (x, y, z))
+        return Integral(conjugate(A)*B*x, (y, z, C))
+
+
+
+
+def overlap(A, B, x, y, z):
+    """
+    
+    Parameters:
+    
+    A: The "bra" normalized WaveFunction
+    B: The "ket" normalized WaveFunction
+    x: What the integral is taken with respect to
+    y: The lower bound of the integral. If bounds are not listed, this is -oo
+    z: The upper bound of the integral. If bounds are not listed, this is oo 
+    
+    For reference:
+    <bra|
+    |ket>
+    so:
+    <A|B>
+    
+    Returns:
+    
+    The overlap of the two WaveFunctions of interest over given bounds. Note that if these are the same WaveFunctions, the overlap is 1.
+    
+    """
+    
+    return Integral(A*B, (x, y, z))
 
 
 
