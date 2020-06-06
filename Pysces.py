@@ -159,7 +159,7 @@ def p_operator(A = None):
 
     Parameters:
 
-    x: what the linear momentum operator is with respect to.
+    A: what the linear momentum operator is with respect to.
 
     Returns:
 
@@ -237,12 +237,12 @@ def hamiltonian(A):
 
 
 
-def expression_replace(R, K):
+def expression_replace(expr, K):
     """
 
     Parameters:
 
-    R: The expanded commutator to be replaced
+    expr: The expanded commutator to be replaced
     K: The variable/parameter with respect to the chosen commutator.
 
     Returns:
@@ -250,27 +250,27 @@ def expression_replace(R, K):
     This replaces the Derivative(1, x) present in the expanded commutator with either Derivative(F(x), x) or Derivative(x*F(x), x).
     Note that the above states "x", but can be done for x, y, or z variables.
     This will also replace [p_x, x] and similar commutators, which are usually computed when using angular momentum operators or similar operators.
-    Note that the R parameter is a str()
+    Note that the "expr" parameter is a str()
 
 
     """
     
     L_x, L_z, L_y, p_x, p_y, p_z, x, y, z = symbols("L_x, L_z, L_y, p_x, p_y, p_z, x, y, z")
     
-    if str('[p_x,x]') in str(R):
-        return sympify(str(sympify(str(R).replace(str('[p_x,x]'), str(expression_replace(comm(p_operator(K), Operator(K), f(K)), K))))).replace(str(p_y*z - p_z*y), str(-L_x)))
+    if str('[p_x,x]') in str(expr):
+        return sympify(str(sympify(str(expr).replace(str('[p_x,x]'), str(expression_replace(comm(p_operator(K), Operator(K), f(K)), K))))).replace(str(p_y*z - p_z*y), str(-L_x)))
     if K == x:
-        return sympify(str(R).replace(str(Derivative(1, K)*f(K)), str(Derivative(f(K), K).doit())).replace(str('Derivative(1, x)*x*f(x)'), str(Derivative(K*f(K), K).doit())))
+        return sympify(str(expr).replace(str(Derivative(1, K)*f(K)), str(Derivative(f(K), K).doit())).replace(str('Derivative(1, x)*x*f(x)'), str(Derivative(K*f(K), K).doit())))
     
-    if str('[p_y, y]') in str(R):
+    if str('[p_y, y]') in str(expr):
         return sympify(str(sympify(str(R).replace(str('[p_y,y]'), str(expression_replace(comm(p_operator(K), Operator(K), f(K)), K))))).replace(str(p_x*z - p_z*x), str(-L_y)))
     if K == y:
-        return sympify(str(R).replace(str(Derivative(1, K)*f(K)), str(Derivative(f(K), K).doit())).replace(str('Derivative(1, y)*y*f(y)'), str(Derivative(K*f(K), K).doit())))
+        return sympify(str(expr).replace(str(Derivative(1, K)*f(K)), str(Derivative(f(K), K).doit())).replace(str('Derivative(1, y)*y*f(y)'), str(Derivative(K*f(K), K).doit())))
     
-    if str('[p_z,z]') in str(R):
-        return sympify(str(sympify(str(R).replace(str('[p_z,z]'), str(expression_replace(comm(p_operator(K), Operator(K), f(K)), K))))).replace(str(p_x*y - p_y*x), str(-L_z)))
+    if str('[p_z,z]') in str(expr):
+        return sympify(str(sympify(str(expr).replace(str('[p_z,z]'), str(expression_replace(comm(p_operator(K), Operator(K), f(K)), K))))).replace(str(p_x*y - p_y*x), str(-L_z)))
     elif K == z:
-        return sympify(str(R).replace(str(Derivative(1, K)*f(K)), str(Derivative(f(K), K).doit())).replace(str('Derivative(1, z)*z*f(z)'), str(Derivative(K*f(K), K).doit())))
+        return sympify(str(expr).replace(str(Derivative(1, K)*f(K)), str(Derivative(f(K), K).doit())).replace(str('Derivative(1, z)*z*f(z)'), str(Derivative(K*f(K), K).doit())))
 
 
 
@@ -415,7 +415,7 @@ def gaussian_normalize(alpha, gamma, x_0, p_0):
 
 
 
-def conjugate(x):
+def conjugate(expr):
     """
 
     Parameters:
@@ -428,20 +428,20 @@ def conjugate(x):
 
     """
     
-    return x.replace(I, -I)
+    return expr.replace(I, -I)
 
 
 
 
-def normalize_constant(A, x, y, z):
+def normalize_constant(WaveFunc, var, lower, upper):
     """
 
     Parameters:
 
-    A: The WaveFunction/expression of interest
-    x: What the integral is taken with respect to
-    y: The lower bound of the integral. If bounds are not listed, this is -oo
-    z: The upper bound of the integral. If bounds are not listed, this is oo
+    WaveFunc: The WaveFunction/expression of interest
+    var: What the integral is taken with respect to
+    lower: The lower bound of the integral. If bounds are not listed, this is -oo
+    upper: The upper bound of the integral. If bounds are not listed, this is oo
 
     Returns:
 
@@ -449,38 +449,28 @@ def normalize_constant(A, x, y, z):
 
     """
     
-    return 1/sqrt(Integral(A*conjugate(A), (x, y, z)))
+    return 1/sqrt(Integral(WaveFunc*conjugate(WaveFunc), (var, lower, upper)))
 
 
 
 
-def expectation_value(A, B, x, y, z, C = None):
+def expectation_value(WaveFunc_1, Operator, WaveFunc_2, var, lower, upper):
     """
 
     Parameters:
     
-    if C == None:
-    
-    A: The normalized WaveFunction/expression of interest
-    B: The operator of interest.
-    x: What the integral is taken with respect to
-    y: The lower bound of the integral. If bounds are not listed, this is -oo
-    z: The upper bound of the integral. If bounds are not listed, this is oo
-    
-    if C is a value:
-    
-    A: The "bra" normalized WaveFunction
-    B: The operator of interest
-    x: The "ket" normalized WaveFunction
-    y: What the integral is taken with respect to
-    z: The lower bound of the integral. If bounds are not listed, this is -oo
-    C: The upper bound of the integral. If bounds are not listed, this is oo
+    WaveFunc_1: The "bra" normalized WaveFunction
+    Operator: The operator of interest
+    WaveFunc_2: The "ket" normalized WaveFunction
+    var: What the integral is taken with respect to
+    lower: The lower bound of the integral. If bounds are not listed, this is -oo
+    upper: The upper bound of the integral. If bounds are not listed, this is oo
     
     For reference:
     <bra|
     |ket>
     so:
-    <A|B|x>
+    <WaveFunc_1|Operator|WaveFunc_2>
 
     Returns:
 
@@ -488,35 +478,32 @@ def expectation_value(A, B, x, y, z, C = None):
 
     """
     
-    if C == None:
-        if B == kinetic_energy(x):
-            return sympify(str(sympify(str(Integral(conjugate(A)*B, (x, y, z))).replace(str(Derivative("1", x)**2), str(Derivative(A, x, x)))).doit()).replace(str('sin(pi*n)'), str(0)).replace(str('cos(pi*n)'), str(0)))
-        if B == p_operator(x):
-            return Integral(conjugate(A)*B, (x, y, z)).replace(Derivative("1", x), Derivative(A, x).doit()) 
-        return Integral(conjugate(A)*B*A, (x, y, z))
     
+    if B == kinetic_energy(x):
+        return sympify(str(sympify(str(Integral(conjugate(A)*B, (x, y, z))).replace(str(Derivative("1", x)**2), str(Derivative(A, x, x)))).doit()).replace(str('sin(pi*n)'), str(0)).replace(str('cos(pi*n)'), str(0)))
+    if B == p_operator(x):
+        return Integral(conjugate(A)*B, (x, y, z)).replace(Derivative("1", x), Derivative(A, x).doit()) 
     else:
-        return Integral(conjugate(A)*B*x, (y, z, C))
+        return Integral(conjugate(WaveFunc_1)*Operator*WaveFunc_2, (var, lower, upper))
 
 
 
-
-def overlap(A, B, x, y, z):
+def overlap(WaveFunc_1, WaveFunc_2, var, lower, upper):
     """
     
     Parameters:
     
-    A: The "bra" normalized WaveFunction
-    B: The "ket" normalized WaveFunction
-    x: What the integral is taken with respect to
-    y: The lower bound of the integral. If bounds are not listed, this is -oo
-    z: The upper bound of the integral. If bounds are not listed, this is oo 
+    WaveFunc_1: The "bra" normalized WaveFunction
+    WaveFunc_2: The "ket" normalized WaveFunction
+    var: What the integral is taken with respect to
+    lower: The lower bound of the integral. If bounds are not listed, this is -oo
+    upper: The upper bound of the integral. If bounds are not listed, this is oo 
     
     For reference:
     <bra|
     |ket>
     so:
-    <A|B>
+    <WaveFunc_1|WaveFunc_2>
     
     Returns:
     
@@ -524,20 +511,20 @@ def overlap(A, B, x, y, z):
     
     """
     
-    return Integral(A*B, (x, y, z))
+    return Integral(WaveFunc_1*WaveFunc_2, (var, lower, upper))
 
 
 
 
-def plot_function(A, B, C, D):
+def plot_function(func, B, lower, upper):
     """
 
     Parameters:
 
-    A: The function/Normalized WaveFunction of interest
+    func: The function/Normalized WaveFunction of interest
     B: This is "x" usually (x-axis)
-    C: The lower bound of the x-axis domain (for Particle in a Box, 0)
-    D: The upper bound of the x-axis domain (for Particle in a Box, 1)
+    lower: The lower bound of the x-axis domain (for Particle in a Box, 0)
+    upper: The upper bound of the x-axis domain (for Particle in a Box, 1)
 
     Returns:
 
@@ -548,7 +535,7 @@ def plot_function(A, B, C, D):
 
     """
         
-    return plot(sympify(str(A)), (B, C, D))
+    return plot(sympify(str(func)), (B, lower, upper))
 
 
 
