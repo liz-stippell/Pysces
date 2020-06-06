@@ -372,6 +372,27 @@ def PIB_normalize(x, L, n):
 
 
 
+def gaussian(alpha, x_0, p):
+    """
+    
+    Parameters:
+    
+    alpha:alpha parameter of the gaussian
+    x_0: x_0 parameter of the gaussian
+    p: p parameter of the gaussian
+    
+    Returns:
+    
+    The moving gaussian wave function.
+    
+    """
+    
+    alpha, x, x_0, p, h_b = symbols("alpha x x_0 p h_b")
+    return exp(-((alpha/2)*(x-x_0)**2 + (I*p)/h_b*(x-x_0)))
+
+
+
+
 def gaussian_normalize(alpha, gamma, x_0, p_0):
     """
     
@@ -606,9 +627,138 @@ def kronecker(i, j):
         return 1
     else:
         return 0
+    
+    
+
+""" The following are for Spherical Harmonics """
+
+
+def spherical(expr):
+    """
+    
+    Parameters:
+    
+    expr: The expression of interest to be changed into spherical coordinates
+    
+    Returns:
+    
+    The expression of interest, A, in terms of spherical coordinates
+    
+    """
+    
+    x, r, theta, phi, y, z = symbols("x r theta phi y z")
+    return expr.replace(x, r*sin(theta)*cos(phi)).replace(y, r*sin(theta)*sin(phi)).replace(z, r*cos(theta))
 
 
 
+def L_2(j, m):
+    """
+    
+    Parameters:
+    
+    j: 
+    m:
+    
+    Returns:
+    
+    The L^2 vector magnitude eigenvalue for spherical harmonics.
+    
+    """
+    
+    h_b = Symbol("h_b")
+    return Bra(str(j), str(","), str(m))*j*(j+1)*h_b**2*Ket(str(j), str(","), str(m))
+
+
+
+def L_z(j, m):
+    """
+    
+    Parameters:
+    
+    j:
+    m:
+    
+    Returns:
+    
+    The L_z projection (in the z direction) eigenvalue for spherical harmonics.
+    
+    """
+    
+    h_b = Symbol("h_b")
+    return Bra(str(j), str(","), str(m))*m*h_b*Ket(str(j), str(","), str(m))
+
+
+
+def L_raising_operator(j = None, m = None):
+    """
+    
+    Parameters:
+    
+    j:
+    m:
+    
+    Returns:
+    
+    If j == None and m == None, the general formula for the raising operator for spherical harmonics is returned.
+    
+    Else, the formula for the raising operator is computed using Dirac notation
+    
+    """
+    
+    L_x, L_y, h_b = symbols("L_x L_y h_b")
+    if j == None and m == None:
+        return Operator(L_x) + I*Operator(L_y)
+    else:
+        return Bra(str(j), str(","), str(m))*h_b*sqrt(j*(j+1)-m*(m+1))*Ket(str(j), str(','), str(m+1))
+
+    
+    
+def L_lowering_operator(j = None, m = None):
+     """
+    
+    Parameters:
+    
+    j:
+    m:
+    
+    Returns:
+    
+    If j == None and m == None, the general formula for the lowering operator for spherical harmonics is returned.
+    
+    Else, the formula for the lowering operator is computed using Dirac notation
+    
+    """
+        
+     L_x, L_y, h_b = symbols("L_x L_y h_b")
+     if j == None and m == None:
+        return Operator(L_x) - I*Operator(L_y)
+     else:
+        return Bra(str(j), str(","), str(m))*h_b*sqrt(j*(j+1)-m*(m-1))*Ket(str(j), str(','), str(m-1))
+
+
+    
+def L_x(j = None, m = None):
+     """
+    
+    Parameters:
+    
+    j:
+    m:
+    
+    Returns:
+    
+    If j == None and m == None, the general formula for the L_x operator for spherical harmonics is returned.
+    
+    Else, the formula for the L_x operator is computed using Dirac notation
+    
+    """
+        
+     if j == None and m == None:
+        L_R, L_L = symbols("L_+ L_-")
+        return (1/2)*(L_R + L_L)
+     else:
+        return (1/2)*(L_raising_operator(j, m) + L_lowering_operator(j, m))
+    
 # In[ ]:
 
 
