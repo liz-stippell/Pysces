@@ -643,8 +643,8 @@ def L_2(j, m):
     
     Parameters:
     
-    j: 
-    m:
+    j: The total angular momentum quantum number
+    m: The magnetic quantum number
     
     Returns:
     
@@ -662,8 +662,8 @@ def L_z(j, m):
     
     Parameters:
     
-    j:
-    m:
+    j: The total angular momentum quantum number
+    m: The magnetic quantum number
     
     Returns:
     
@@ -681,8 +681,8 @@ def L_raising_operator(j = None, m = None):
     
     Parameters:
     
-    j:
-    m:
+    j: The total angular momentum quantum number
+    m: The magnetic quantum number
     
     Returns:
     
@@ -705,8 +705,8 @@ def L_lowering_operator(j = None, m = None):
     
     Parameters:
     
-    j:
-    m:
+    j: The total angular momentum quantum number
+    m: The magnetic quantum number
     
     Returns:
     
@@ -729,8 +729,8 @@ def L_x(j = None, m = None):
     
     Parameters:
     
-    j:
-    m:
+    j: The total angular momentum quantum number
+    m: The magnetic quantum number
     
     Returns:
     
