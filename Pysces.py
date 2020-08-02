@@ -38,12 +38,10 @@ def comm_1(commutator_1, commutator_2, aux):
 
 
 
-
 x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
 L_z = x*p_y - y*p_x
 L_y = z*p_x - x*p_z
 L_x = y*p_z - z*p_y
-
 def comm(commutator_1, commutator_2, aux):
     """
     
@@ -71,30 +69,30 @@ def comm(commutator_1, commutator_2, aux):
 
     """
     
-    if A == L_z and B == L_y:
+    if commutator_1 == L_z and commutator_2 == L_y:
         return (Commutator(Operator(x*p_y), Operator(z*p_x))*aux + Commutator(Operator(y*p_x), Operator(x*p_z))*aux - Commutator(Operator(x*p_y), Operator(x*p_z))*aux - Commutator(Operator(y*p_x), Operator(z*p_x))*aux)
-    if A == L_z and B == L_x:
+    if commutator_1 == L_z and commutator_2 == L_x:
         return (Commutator(Operator(x*p_y), Operator(y*p_z))*aux + Commutator(Operator(y*p_x), Operator(z*p_y))*aux - Commutator(Operator(x*p_y), Operator(z*p_y))*aux - Commutator(Operator(y*p_x), Operator(y*p_z))*aux)
-    if A == L_y and B == L_z:
+    if commutator_1 == L_y and commutator_2 == L_z:
         return (Commutator(Operator(z*p_x), Operator(x*p_y))*aux + Commutator(Operator(x*p_z), Operator(y*p_x))*aux - Commutator(Operator(z*p_x), Operator(y*p_x))*aux - Commutator(Operator(x*p_z), Operator(x*p_y))*aux)
-    if A == L_y and B == L_x:
+    if commutator_1 == L_y and commutator_2 == L_x:
         return (Commutator(Operator(z*p_x), Operator(y*p_z))*aux + Commutator(Operator(x*p_z), Operator(z*p_y))*aux - Commutator(Operator(z*p_x), Operator(z*p_y))*aux - Commutator(Operator(x*p_z), Operator(y*p_z))*aux)
-    if A == L_x and B == L_z:
+    if commutator_1 == L_x and commutator_2 == L_z:
         return (Commutator(Operator(y*p_z), Operator(x*p_y))*aux + Commutator(Operator(z*p_y), Operator(y*p_x))*aux - Commutator(Operator(y*p_z), Operator(y*p_x))*aux - Commutator(Operator(z*p_y), Operator(x*p_y))*aux)
-    if A == L_x and B == L_y:
+    if commutator_1 == L_x and commutator_2 == L_y:
         return (Commutator(Operator(y*p_z), Operator(z*p_x))*aux + Commutator(Operator(z*p_y), Operator(x*p_z))*aux - Commutator(Operator(y*p_z), Operator(x*p_z))*aux - Commutator(Operator(z*p_y), Operator(z*p_x))*aux)
     
-    if A == L_z:
+    if commutator_1 == L_z:
         return (Commutator(Operator(x*p_y), Operator(commutator_2))*aux - Commutator(Operator(y*p_x), Operator(commutator_2))*aux)
-    if A == L_y:
+    if commutator_1 == L_y:
         return (Commutator(Operator(z*p_x), Operator(commutator_2))*aux - Commutator(Operator(x*p_z), Operator(commutator_2))*aux)
-    if A == L_x:
+    if commutator_1 == L_x:
         return (Commutator(Operator(y*p_z), Operator(commutator_2))*aux - Commutator(Operator(z*p_y), Operator(commutator_2))*aux)
-    if B == L_z:
+    if commutator_2 == L_z:
         return (Commutator(Operator(commutator_1), Operator(x*p_y))*aux - Commutator(Operator(commutator_1), Operator(y*p_x))*aux)
-    if B == L_y:
+    if commutator_2 == L_y:
         return (Commutator(Operator(commutator_1), Operator(z*p_x))*aux - Commutator(Operator(commutator_1), Operator(x*p_z))*aux)
-    if B == L_x:
+    if commutator_2 == L_x:
         return (Commutator(Operator(commutator_1), Operator(y*p_z))*aux - Commutator(Operator(commutator_1), Operator(z*p_y))*aux)
     else:
         return (expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('x'))) or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('y'))) or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('z')))) 
@@ -126,6 +124,29 @@ def factorization(expr, var):
         return comm(Operator(y), p_operator(y), f(y))*L_y
     if var == x:
         return comm(Operator(x), p_operator(x), f(x))*L_x
+
+    
+    
+    
+def comm_steps(commutator_1, commutator_2, aux):
+    """
+    
+    comm_steps(commutator_1, commutator_2, aux)
+    
+    Parameters:
+    
+    commutator_1: the first operator
+    commutator_2: the second operator
+    aux: the auxiliary function
+    
+    Returns:
+    
+    Three main steps used to solve a commutator. The first is the printed commutator in brackets, the second is the expansion, and the third output will be the answer. Please note that as of now, the code does not understand the addition/subtraction/multiplication/division of commutators, and so if there are multiple commutators in a line (ex: comm_steps(comm(A, B) - comm(C, D))) the code will not process this and therefore each individual commutator needs to have its own line.
+    
+    
+    """
+    
+    return display(Commutator(Operator(commutator_1), Operator(commutator_2))*aux), display(comm_1(Operator(commutator_1), Operator(commutator_2), aux)), display(expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('x'))) or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('y'))) or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('z'))))
 
 
 
