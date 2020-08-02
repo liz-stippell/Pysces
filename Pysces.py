@@ -15,200 +15,182 @@ init_printing()
 I = sqrt(-1)
 
 
-def comm_1(A, B, f):
+def comm_1(commutator_1, commutator_2, aux):
     """
+    
+    comm_1(commutator_1, commutator_2, aux)
 
-    This function is not used directly, it is only used in the COMM() function below. 
+    This function is not used directly, it is only used in the comm() function below. 
 
     Parameters:
 
-    A: The first operator in the commutator
-    B: The second operator in the commutator
-    f: The auxiliary function. This is defined below, as F(x).
+    commutator_1: The first operator in the commutator
+    commutator_2: The second operator in the commutator
+    aux: The auxiliary function. This is defined below, as F(x).
 
     Returns:
 
-    The commutator of A and B with respect to F(x).
+    The commutator of commutator_1 and commutator_2 with respect to the auxiliary function.
 
     """
     
-    return expand((Commutator(Operator(A), Operator(B))*f).doit())
+    return expand((Commutator(Operator(commutator_1), Operator(commutator_2))*aux).doit())
 
 
 
 
-def comm(x, y, a, b = None):
+x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
+L_z = x*p_y - y*p_x
+L_y = z*p_x - x*p_z
+L_x = y*p_z - z*p_y
+
+def comm(commutator_1, commutator_2, aux):
     """
-
+    
+    comm(commutator_1, commutator_2, aux)
+    
     This function has a few different outputs, depending on the parameters.
 
     Parameters:
 
-    x: the first term of the first operator
-    y: the second term of the firts operator
-    a: the first term of the second operator
-    b: the second term of the second operator
-
-    The commutator looks similar to this: [x + y, a + b]
-    An example would be the angular momentum operators, [L_x, L_y], or any similar combination.
+    commutator_1: the first operator
+    commutator_2: the second operator
+    aux: the auxiliary function
 
     Returns:
 
-    If b == None (this means there is no b parameter listed), the output will be COMM_1(), as defined above.
-    If b == 0 (0 would be written in the argument), the output will be [x, a] + [y, a], such as used in the case of [L_x, x]
-    Else, [x, a] - [x, b] + [y, a] + [y, b] would be returned, such as the case of [L_x, L_y]
+    This function automatically returns a solved commutator. For more complicated commutators involving the angular momentum operators (L_z, L_y, L_x), please make sure that the correct notation is being used (ex: if you want the angular momentum operator in the "x" direction, please use "L_x"
+    
+    
+    Please note the following may be helpful:
+    
+    x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
+    L_z = x*p_y - y*p_x
+    L_y = z*p_x - x*p_z
+    L_x = y*p_z - z*p_y
 
     """
     
-    if b == None:
-        return comm_1(Operator(x), Operator(y), a)
-    elif b == 0:
-        return Commutator(Operator(x), Operator(a)) + Commutator(Operator(y), Operator(a))
-    else:       
-        return Commutator(Operator(x), Operator(a)) - Commutator(Operator(x), Operator(b)) + Commutator(Operator(y), Operator(a)) + Commutator(Operator(y), Operator(b))
-
-
-
-
-def factor_comm(A, B, C, D):
+    if A == L_z and B == L_y:
+        return (Commutator(Operator(x*p_y), Operator(z*p_x))*aux + Commutator(Operator(y*p_x), Operator(x*p_z))*aux - Commutator(Operator(x*p_y), Operator(x*p_z))*aux - Commutator(Operator(y*p_x), Operator(z*p_x))*aux)
+    if A == L_z and B == L_x:
+        return (Commutator(Operator(x*p_y), Operator(y*p_z))*aux + Commutator(Operator(y*p_x), Operator(z*p_y))*aux - Commutator(Operator(x*p_y), Operator(z*p_y))*aux - Commutator(Operator(y*p_x), Operator(y*p_z))*aux)
+    if A == L_y and B == L_z:
+        return (Commutator(Operator(z*p_x), Operator(x*p_y))*aux + Commutator(Operator(x*p_z), Operator(y*p_x))*aux - Commutator(Operator(z*p_x), Operator(y*p_x))*aux - Commutator(Operator(x*p_z), Operator(x*p_y))*aux)
+    if A == L_y and B == L_x:
+        return (Commutator(Operator(z*p_x), Operator(y*p_z))*aux + Commutator(Operator(x*p_z), Operator(z*p_y))*aux - Commutator(Operator(z*p_x), Operator(z*p_y))*aux - Commutator(Operator(x*p_z), Operator(y*p_z))*aux)
+    if A == L_x and B == L_z:
+        return (Commutator(Operator(y*p_z), Operator(x*p_y))*aux + Commutator(Operator(z*p_y), Operator(y*p_x))*aux - Commutator(Operator(y*p_z), Operator(y*p_x))*aux - Commutator(Operator(z*p_y), Operator(x*p_y))*aux)
+    if A == L_x and B == L_y:
+        return (Commutator(Operator(y*p_z), Operator(z*p_x))*aux + Commutator(Operator(z*p_y), Operator(x*p_z))*aux - Commutator(Operator(y*p_z), Operator(x*p_z))*aux - Commutator(Operator(z*p_y), Operator(z*p_x))*aux)
+    
+    if A == L_z:
+        return (Commutator(Operator(x*p_y), Operator(commutator_2))*aux - Commutator(Operator(y*p_x), Operator(commutator_2))*aux)
+    if A == L_y:
+        return (Commutator(Operator(z*p_x), Operator(commutator_2))*aux - Commutator(Operator(x*p_z), Operator(commutator_2))*aux)
+    if A == L_x:
+        return (Commutator(Operator(y*p_z), Operator(commutator_2))*aux - Commutator(Operator(z*p_y), Operator(commutator_2))*aux)
+    if B == L_z:
+        return (Commutator(Operator(commutator_1), Operator(x*p_y))*aux - Commutator(Operator(commutator_1), Operator(y*p_x))*aux)
+    if B == L_y:
+        return (Commutator(Operator(commutator_1), Operator(z*p_x))*aux - Commutator(Operator(commutator_1), Operator(x*p_z))*aux)
+    if B == L_x:
+        return (Commutator(Operator(commutator_1), Operator(y*p_z))*aux - Commutator(Operator(commutator_1), Operator(z*p_y))*aux)
+    else:
+        return (expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('x'))) or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('y'))) or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('z')))) 
+    
+    
+    
+    
+def factorization(expr, var):
     """
-
+    
+    factorization(expr, var)
+    
     Parameters:
-
-    A: The first term of the first operator
-    B: The second term of the first operator
-    C: The first term of the second operator
-    D: The second term of the second operator
-
+    
+    expr: the expression of interest
+    var: the variable of interest. This is most likely going to be the same variable used in the auxiliary function.
+    
+    
     Returns:
-
-    This function factors out terms based on the criteria set by the "if" statements. If a term in the first operator matches a term in the second operator, the commutator will be reported as zero ("0").
-    The criterion set examines the variables of each operator, and factors out operators that have "mismatched" variables (such as p with respect to z and y), while keeping the terms that are with respect to the same variable within a commutator, such as [p_x, x].
-
-    Note that if there are multiplte commutators, the FACTOR_COMM() functions can be added or subtracted ("+" or "-") in a single line for ease.
-
+    
+    The simplified commutator. This is only used when both of the operators in the commutator are angular momentum operators.
+    
     """
     
-    x, y, z, p_x, p_y, p_z = symbols("x y z p_x p_y p_z")
-    if A == p_y and C == y:
-        return (Operator(B)*Operator(D)*Commutator(Operator(A), Operator(C)) )
-    if A == y and C == p_y:
-        return (Operator(B)*Operator(D)*Commutator(Operator(A), Operator(C)) )
-    if A == p_x and C == x:
-        return (Operator(B)*Operator(D)*Commutator(Operator(A), Operator(C)) )
-    if A == x and C == p_x:
-        return (Operator(B)*Operator(D)*Commutator(Operator(A), Operator(C)) )
-    if A == p_z and C == z:
-        return (Operator(B)*Operator(D)*Commutator(Operator(A), Operator(C)) )
-    if A == z and C == p_z:
-        return (Operator(B)*Operator(D)*Commutator(Operator(A), Operator(C)) )
-        
-    if A == p_y and D == y:
-        return( Operator(B)*Operator(C)*Commutator(Operator(A), Operator(D)) )
-    if A == y and D == p_y:
-        return( Operator(B)*Operator(C)*Commutator(Operator(A), Operator(D)) )
-    if A == p_x and D == x:
-        return( Operator(B)*Operator(C)*Commutator(Operator(A), Operator(D)) )
-    if A == x and D == p_x:
-        return( Operator(B)*Operator(C)*Commutator(Operator(A), Operator(D)) )
-    if A == p_z and D == z:
-        return( Operator(B)*Operator(C)*Commutator(Operator(A), Operator(D)) )
-    if A == z and D == p_z:
-        return( Operator(B)*Operator(C)*Commutator(Operator(A), Operator(D)) )
-   
-    if B == p_y and C == y:
-         return( Operator(A)*Operator(D)*Commutator(Operator(B), Operator(C)) )
-    if B == y and C == p_y:
-         return( Operator(A)*Operator(D)*Commutator(Operator(B), Operator(C)) )
-    if B == p_x and C == x:
-         return( Operator(A)*Operator(D)*Commutator(Operator(B), Operator(C)) )
-    if B == x and C == p_x:
-         return( Operator(A)*Operator(D)*Commutator(Operator(B), Operator(C)) )
-    if B == p_z and C == z:
-         return( Operator(A)*Operator(D)*Commutator(Operator(B), Operator(C)) )
-    if B == z and C == p_z:
-         return( Operator(A)*Operator(D)*Commutator(Operator(B), Operator(C)) )
-    
-    if B == p_y and D == y:
-        return(Operator(A)*Operator(C)*Commutator(Operator(B), Operator(D)))
-    if B == y and D == p_y:
-        return(Operator(A)*Operator(C)*Commutator(Operator(B), Operator(D)))
-    if B == p_x and D == x:
-        return(Operator(A)*Operator(C)*Commutator(Operator(B), Operator(D)))
-    if B == x and D == p_x:
-        return(Operator(A)*Operator(C)*Commutator(Operator(B), Operator(D)))
-    if B == p_z and D == z:
-        return(Operator(A)*Operator(C)*Commutator(Operator(B), Operator(D)))
-    if B == z and D == p_z:
-         return(Operator(A)*Operator(C)*Commutator(Operator(B), Operator(D)))
-
-    if A == C:
-        return 0
-    if A == D:
-        return 0
-    if B == C:
-         return 0
-    if B == D:
-        return 0
+    L_z, L_y, L_x = symbols("L_z, L_y, L_x")
+    if var == z:
+        return comm(Operator(z), p_operator(z), f(z))*L_z
+    if var == y:
+        return comm(Operator(y), p_operator(y), f(y))*L_y
+    if var == x:
+        return comm(Operator(x), p_operator(x), f(x))*L_x
 
 
 
 
-def p_operator(A = None):
+def p_operator(var = None):
     """
+    
+    p_operator(var = None)
 
     Parameters:
 
-    A: what the linear momentum operator is with respect to.
+    var: The variable that the linear momentum operator is with respect to.
 
     Returns:
 
     The linear momentum operator, with respect to the parameter.
  
     Note that the "1" in the derivative is a placeholder, which will be replaced.
-    If A == None, the general linear operator is printed, with all three positional arguments "x", "y", and "z"
+    If var == None, the general linear operator is printed, with all three positional arguments "x", "y", and "z"
 
     """
     
     h_b, m = symbols("h_b m")
-    if A == None:
+    if var == None:
         return Operator(-I*h_b*(Derivative("1", x))) + Operator(-I*h_b*(Derivative("1", y))) + Operator(-I*h_b*(Derivative("1", z)))
     else:
-        return Operator(-I*h_b*(Derivative("1", A)))
+        return Operator(-I*h_b*(Derivative("1", var)))
 
 
 
 
-def kinetic_energy(A = None):
+def kinetic_energy(var = None):
     """
+    
+    kinetic_energy(var = None)
 
     Parameters:
 
-    x: The variable in which the derivative is with respect to.
+    var: The variable in which the derivative is with respect to.
 
     Returns:
 
     The kinetic energy operator, with respect to the chosen parameter. 
 
     Note that the "1" in the derivative is a placeholder, which will be replaced.
-    If A == None, the general linear operator is printed, with all three positional arguments "x", "y", and "z"
+    If var == None, the general linear operator is printed, with all three positional arguments "x", "y", and "z"
 
     """
     
     h_b, m = symbols("h_b m")
-    if A == None:
+    if var == None:
         return (Operator((-I*h_b*(Derivative("1", x)))**2)*(1/(2*m))) + (Operator((-I*h_b*(Derivative("1", y)))**2)*(1/(2*m))) + (Operator((-I*h_b*(Derivative("1", z)))**2)*(1/(2*m)))
     else:
-        return (Operator((-I*h_b*(Derivative("1", A)))**2)*(1/(2*m)))
+        return (Operator((-I*h_b*(Derivative("1", var)))**2)*(1/(2*m)))
 
 
 
-def v(x):
+def v(var):
     """
+    
+    v(var)
     
     Parameters:
     
-    x: The variable for the given function. This is usually "x", "y" or "z".
+    var: The variable for the given function. This is usually "x", "y" or "z".
     
     Returns:
     
@@ -216,16 +198,18 @@ def v(x):
     
     """
     
-    return Operator(Function("v")(x))
+    return Operator(Function("v")(var))
 
 
 
-def hamiltonian(A):
+def hamiltonian(var):
     """
+    
+    hamiltonian(var)
     
     Parameters:
     
-    A: The variable for the given function. This is usually "x", "y" or "z".
+    var: The variable for the given function. This is usually "x", "y" or "z".
     
     Returns:
     
@@ -233,17 +217,21 @@ def hamiltonian(A):
     
     """
     
-    return kinetic_energy(A) + v(A)
+    return kinetic_energy(var) + v(var)
 
 
 
-def expression_replace(expr, K):
+def expression_replace(expr, var):
     """
+    
+    This is only used within the "comm()" function. 
+    
+    expression_replace(expr, var)
 
     Parameters:
 
     expr: The expanded commutator to be replaced
-    K: The variable/parameter with respect to the chosen commutator.
+    var: The variable/parameter with respect to the chosen commutator.
 
     Returns:
 
@@ -258,45 +246,48 @@ def expression_replace(expr, K):
     L_x, L_z, L_y, p_x, p_y, p_z, x, y, z = symbols("L_x, L_z, L_y, p_x, p_y, p_z, x, y, z")
     
     if str('[p_x,x]') in str(expr):
-        return sympify(str(sympify(str(expr).replace(str('[p_x,x]'), str(expression_replace(comm(p_operator(K), Operator(K), f(K)), K))))).replace(str(p_y*z - p_z*y), str(-L_x)))
-    if K == x:
-        return sympify(str(expr).replace(str(Derivative(1, K)*f(K)), str(Derivative(f(K), K).doit())).replace(str('Derivative(1, x)*x*f(x)'), str(Derivative(K*f(K), K).doit())))
+        return sympify(str(sympify(str(expr).replace(str('[p_x,x]'), str(expression_replace(comm(p_operator(var), Operator(var), f(var)), K))))).replace(str(p_y*z - p_z*y), str(-L_x)))
+    if var == x:
+        return sympify(str(expr).replace(str(Derivative(1, var)*f(var)), str(Derivative(f(var), var).doit())).replace(str('Derivative(1, x)*x*f(x)'), str(Derivative(K*f(var), var).doit())))
     
     if str('[p_y, y]') in str(expr):
-        return sympify(str(sympify(str(R).replace(str('[p_y,y]'), str(expression_replace(comm(p_operator(K), Operator(K), f(K)), K))))).replace(str(p_x*z - p_z*x), str(-L_y)))
-    if K == y:
-        return sympify(str(expr).replace(str(Derivative(1, K)*f(K)), str(Derivative(f(K), K).doit())).replace(str('Derivative(1, y)*y*f(y)'), str(Derivative(K*f(K), K).doit())))
+        return sympify(str(sympify(str(R).replace(str('[p_y,y]'), str(expression_replace(comm(p_operator(var), Operator(var), f(var)), K))))).replace(str(p_x*z - p_z*x), str(-L_y)))
+    if var == y:
+        return sympify(str(expr).replace(str(Derivative(1, var)*f(var)), str(Derivative(f(var), var).doit())).replace(str('Derivative(1, y)*y*f(y)'), str(Derivative(var*f(var), var).doit())))
     
     if str('[p_z,z]') in str(expr):
-        return sympify(str(sympify(str(expr).replace(str('[p_z,z]'), str(expression_replace(comm(p_operator(K), Operator(K), f(K)), K))))).replace(str(p_x*y - p_y*x), str(-L_z)))
-    elif K == z:
-        return sympify(str(expr).replace(str(Derivative(1, K)*f(K)), str(Derivative(f(K), K).doit())).replace(str('Derivative(1, z)*z*f(z)'), str(Derivative(K*f(K), K).doit())))
+        return sympify(str(sympify(str(expr).replace(str('[p_z,z]'), str(expression_replace(comm(p_operator(var), Operator(var), f(var)), K))))).replace(str(p_x*y - p_y*x), str(-L_z)))
+    elif var == z:
+        return sympify(str(expr).replace(str(Derivative(1, var)*f(var)), str(Derivative(f(var), var).doit())).replace(str('Derivative(1, z)*z*f(z)'), str(Derivative(var*f(var), var).doit())))
 
 
 
 
-
-def f(x):
+def f(var):
     """
+    
+    f(var)
 
     Parameters:
 
-    x: This is what the auxiliary function is with respect to. It should also match the parameters of the other arguments in the COMM() function. (example: if one operator is P_OP(y), the auxiliary function should be F(y).
+    var: This is what the auxiliary function is with respect to. It should also match the parameters of the other arguments in the comm() function. (example: if one operator is p_operator(y), the auxiliary function should be f(y).
 
     Returns:
 
-    This is the auxiliary function, commonly used in the COMM() function.
-    This simply returns "F(x)", x being with chosen parameter.
+    This is the auxiliary function, commonly used in the comm() function.
+    This simply returns "f(x)", x being with chosen parameter.
 
     """
     
-    return Operator(Function('f')(x))
+    return Operator(Function('f')(var))
 
 
 
 
 def HO():
     """
+    
+    HO()
 
     Parameters:
 
@@ -316,6 +307,8 @@ def HO():
 
 def planewave(x):
     """
+    
+    planewave(x)
 
     Parameters:
 
@@ -334,6 +327,8 @@ def planewave(x):
 
 def PIB(x, L, n):
     """
+    
+    PIB(x, L, n)
 
     Parameters:
 
@@ -354,6 +349,8 @@ def PIB(x, L, n):
 
 def PIB_normalize(x, L, n):
     """
+    
+    PIB_normalize(x, L, n)
 
     Parameters:
 
@@ -363,7 +360,7 @@ def PIB_normalize(x, L, n):
 
     Returns:
 
-    The normalized WaveFunction for Particle in a Box, with respect to the chosen variables. This answer can also be calculated via the NORMALIZE() function.
+    The normalized WaveFunction for Particle in a Box, with respect to the chosen variables. This answer can also be calculated using the normalize_constant() function.
 
     """
     
@@ -374,6 +371,8 @@ def PIB_normalize(x, L, n):
 
 def gaussian(alpha, x_0, p):
     """
+    
+    gaussian(alpha, x_0, p)
     
     Parameters:
     
@@ -396,6 +395,8 @@ def gaussian(alpha, x_0, p):
 def gaussian_normalize(alpha, gamma, x_0, p_0):
     """
     
+    gaussian_normalize(alpha, gamma, x_0, p_0)
+    
     Parameters:
     
     alpha: alpha parameter of the normalized gaussian
@@ -417,6 +418,8 @@ def gaussian_normalize(alpha, gamma, x_0, p_0):
 
 def conjugate(expr):
     """
+    
+    conjugate(expr)
 
     Parameters:
 
@@ -435,6 +438,8 @@ def conjugate(expr):
 
 def normalize_constant(WaveFunc, var, lower, upper):
     """
+    
+    normalize_constant(WaveFunc, var, lower, upper)
 
     Parameters:
 
@@ -456,6 +461,8 @@ def normalize_constant(WaveFunc, var, lower, upper):
 
 def expectation_value(WaveFunc_1, Operator, WaveFunc_2, var, lower, upper):
     """
+    
+    expectation_value(WaveFunc_1, Operator, WaveFunc_2, var, lower, upper)
 
     Parameters:
     
@@ -491,6 +498,8 @@ def expectation_value(WaveFunc_1, Operator, WaveFunc_2, var, lower, upper):
 def overlap(WaveFunc_1, WaveFunc_2, var, lower, upper):
     """
     
+    overlap(WaveFunc_1, WaveFunc_2, var, lower, upper)
+    
     Parameters:
     
     WaveFunc_1: The "bra" normalized WaveFunction
@@ -518,6 +527,8 @@ def overlap(WaveFunc_1, WaveFunc_2, var, lower, upper):
 
 def plot_function(func, B, lower, upper):
     """
+    
+    plot_function(func, B, lower, upper)
 
     Parameters:
 
@@ -542,6 +553,8 @@ def plot_function(func, B, lower, upper):
 
 def laguerre(r, n):
     """
+    
+    laguerre(r, n)
 
     Parameters:
 
@@ -561,6 +574,8 @@ def laguerre(r, n):
 
 def laguerre_2(r, n):
     """
+    
+    laguerre_2(r, n)
 
     Parameters:
 
@@ -580,6 +595,8 @@ def laguerre_2(r, n):
 
 def laguerre_assoc(n, l):
     """
+    
+    laguerre_assoc(n, l)
 
     Parameters:
 
@@ -598,6 +615,8 @@ def laguerre_assoc(n, l):
 
 def kronecker(i, j):
     """
+    
+    kronecker(i, j)
     
     Parameters:
     
@@ -623,6 +642,8 @@ def kronecker(i, j):
 def spherical(expr):
     """
     
+    spherical(expr)
+    
     Parameters:
     
     expr: The expression of interest to be changed into spherical coordinates
@@ -640,6 +661,8 @@ def spherical(expr):
 
 def L_2(j, m):
     """
+    
+    L_2(j, m)
     
     Parameters:
     
@@ -660,6 +683,8 @@ def L_2(j, m):
 def L_z(j, m):
     """
     
+    L_z(j, m)
+    
     Parameters:
     
     j: The total angular momentum quantum number
@@ -678,6 +703,8 @@ def L_z(j, m):
 
 def L_raising_operator(j = None, m = None):
     """
+    
+    L_raising_operator(j = None, m = None)
     
     Parameters:
     
@@ -702,8 +729,10 @@ def L_raising_operator(j = None, m = None):
     
 def L_lowering_operator(j = None, m = None):
      """
+     
+     L_lowering_operator(j = None, m = None)
     
-    Parameters:
+     Parameters:
     
     j: The total angular momentum quantum number
     m: The magnetic quantum number
@@ -726,6 +755,8 @@ def L_lowering_operator(j = None, m = None):
     
 def L_x(j = None, m = None):
      """
+    
+    L_x(j = None, m = None)
     
     Parameters:
     
