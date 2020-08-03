@@ -17,8 +17,6 @@ I = sqrt(-1)
 
 def comm_1(commutator_1, commutator_2, aux):
     """
-    
-    comm_1(commutator_1, commutator_2, aux)
 
     This function is not used directly, it is only used in the comm() function below. 
 
@@ -38,15 +36,11 @@ def comm_1(commutator_1, commutator_2, aux):
 
 
 
-x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
-L_z = x*p_y - y*p_x
-L_y = z*p_x - x*p_z
-L_x = y*p_z - z*p_y
+
 def comm(commutator_1, commutator_2, aux):
+    L_z, L_y, L_x = symbols("L_z, L_y, L_x")
     """
-    
-    comm(commutator_1, commutator_2, aux)
-    
+
     This function has a few different outputs, depending on the parameters.
 
     Parameters:
@@ -70,29 +64,41 @@ def comm(commutator_1, commutator_2, aux):
     """
     
     if commutator_1 == L_z and commutator_2 == L_y:
+        x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
         return (Commutator(Operator(x*p_y), Operator(z*p_x))*aux + Commutator(Operator(y*p_x), Operator(x*p_z))*aux - Commutator(Operator(x*p_y), Operator(x*p_z))*aux - Commutator(Operator(y*p_x), Operator(z*p_x))*aux)
     if commutator_1 == L_z and commutator_2 == L_x:
+        x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
         return (Commutator(Operator(x*p_y), Operator(y*p_z))*aux + Commutator(Operator(y*p_x), Operator(z*p_y))*aux - Commutator(Operator(x*p_y), Operator(z*p_y))*aux - Commutator(Operator(y*p_x), Operator(y*p_z))*aux)
     if commutator_1 == L_y and commutator_2 == L_z:
+        x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
         return (Commutator(Operator(z*p_x), Operator(x*p_y))*aux + Commutator(Operator(x*p_z), Operator(y*p_x))*aux - Commutator(Operator(z*p_x), Operator(y*p_x))*aux - Commutator(Operator(x*p_z), Operator(x*p_y))*aux)
     if commutator_1 == L_y and commutator_2 == L_x:
+        x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
         return (Commutator(Operator(z*p_x), Operator(y*p_z))*aux + Commutator(Operator(x*p_z), Operator(z*p_y))*aux - Commutator(Operator(z*p_x), Operator(z*p_y))*aux - Commutator(Operator(x*p_z), Operator(y*p_z))*aux)
     if commutator_1 == L_x and commutator_2 == L_z:
+        x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
         return (Commutator(Operator(y*p_z), Operator(x*p_y))*aux + Commutator(Operator(z*p_y), Operator(y*p_x))*aux - Commutator(Operator(y*p_z), Operator(y*p_x))*aux - Commutator(Operator(z*p_y), Operator(x*p_y))*aux)
     if commutator_1 == L_x and commutator_2 == L_y:
+        x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
         return (Commutator(Operator(y*p_z), Operator(z*p_x))*aux + Commutator(Operator(z*p_y), Operator(x*p_z))*aux - Commutator(Operator(y*p_z), Operator(x*p_z))*aux - Commutator(Operator(z*p_y), Operator(z*p_x))*aux)
     
     if commutator_1 == L_z:
+        x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
         return (Commutator(Operator(x*p_y), Operator(commutator_2))*aux - Commutator(Operator(y*p_x), Operator(commutator_2))*aux)
     if commutator_1 == L_y:
+        x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
         return (Commutator(Operator(z*p_x), Operator(commutator_2))*aux - Commutator(Operator(x*p_z), Operator(commutator_2))*aux)
     if commutator_1 == L_x:
+        x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
         return (Commutator(Operator(y*p_z), Operator(commutator_2))*aux - Commutator(Operator(z*p_y), Operator(commutator_2))*aux)
     if commutator_2 == L_z:
+        x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
         return (Commutator(Operator(commutator_1), Operator(x*p_y))*aux - Commutator(Operator(commutator_1), Operator(y*p_x))*aux)
     if commutator_2 == L_y:
+        x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
         return (Commutator(Operator(commutator_1), Operator(z*p_x))*aux - Commutator(Operator(commutator_1), Operator(x*p_z))*aux)
     if commutator_2 == L_x:
+        x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
         return (Commutator(Operator(commutator_1), Operator(y*p_z))*aux - Commutator(Operator(commutator_1), Operator(z*p_y))*aux)
     else:
         return (expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('x'))) or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('y'))) or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('z')))) 
@@ -102,9 +108,7 @@ def comm(commutator_1, commutator_2, aux):
     
 def factorization(expr, var):
     """
-    
-    factorization(expr, var)
-    
+
     Parameters:
     
     expr: the expression of interest
@@ -130,9 +134,7 @@ def factorization(expr, var):
     
 def comm_steps(commutator_1, commutator_2, aux):
     """
-    
-    comm_steps(commutator_1, commutator_2, aux)
-    
+
     Parameters:
     
     commutator_1: the first operator
@@ -153,8 +155,6 @@ def comm_steps(commutator_1, commutator_2, aux):
 
 def p_operator(var = None):
     """
-    
-    p_operator(var = None)
 
     Parameters:
 
@@ -180,8 +180,6 @@ def p_operator(var = None):
 
 def kinetic_energy(var = None):
     """
-    
-    kinetic_energy(var = None)
 
     Parameters:
 
@@ -207,15 +205,13 @@ def kinetic_energy(var = None):
 def v(var):
     """
     
-    v(var)
-    
     Parameters:
     
     var: The variable for the given function. This is usually "x", "y" or "z".
     
     Returns:
     
-    The general potential energy operator, V(x)
+    The general potential energy operator, v(x)
     
     """
     
@@ -225,9 +221,7 @@ def v(var):
 
 def hamiltonian(var):
     """
-    
-    hamiltonian(var)
-    
+
     Parameters:
     
     var: The variable for the given function. This is usually "x", "y" or "z".
@@ -269,7 +263,7 @@ def expression_replace(expr, var):
     if str('[p_x,x]') in str(expr):
         return sympify(str(sympify(str(expr).replace(str('[p_x,x]'), str(expression_replace(comm(p_operator(var), Operator(var), f(var)), K))))).replace(str(p_y*z - p_z*y), str(-L_x)))
     if var == x:
-        return sympify(str(expr).replace(str(Derivative(1, var)*f(var)), str(Derivative(f(var), var).doit())).replace(str('Derivative(1, x)*x*f(x)'), str(Derivative(K*f(var), var).doit())))
+        return sympify(str(expr).replace(str(Derivative(1, var)*f(var)), str(Derivative(f(var), var).doit())).replace(str('Derivative(1, x)*x*f(x)'), str(Derivative(var*f(var), var).doit())))
     
     if str('[p_y, y]') in str(expr):
         return sympify(str(sympify(str(R).replace(str('[p_y,y]'), str(expression_replace(comm(p_operator(var), Operator(var), f(var)), K))))).replace(str(p_x*z - p_z*x), str(-L_y)))
@@ -286,8 +280,6 @@ def expression_replace(expr, var):
 
 def f(var):
     """
-    
-    f(var)
 
     Parameters:
 
@@ -307,8 +299,6 @@ def f(var):
 
 def HO():
     """
-    
-    HO()
 
     Parameters:
 
@@ -328,8 +318,6 @@ def HO():
 
 def planewave(x):
     """
-    
-    planewave(x)
 
     Parameters:
 
@@ -348,8 +336,6 @@ def planewave(x):
 
 def PIB(x, L, n):
     """
-    
-    PIB(x, L, n)
 
     Parameters:
 
@@ -368,10 +354,8 @@ def PIB(x, L, n):
 
 
 
-def PIB_normalize(x, L, n):
+def PIB_normalized(x, L, n):
     """
-    
-    PIB_normalize(x, L, n)
 
     Parameters:
 
@@ -390,11 +374,9 @@ def PIB_normalize(x, L, n):
 
 
 
-def gaussian(alpha, x_0, p):
+def moving_gaussian(alpha, x_0, p):
     """
-    
-    gaussian(alpha, x_0, p)
-    
+
     Parameters:
     
     alpha:alpha parameter of the gaussian
@@ -413,11 +395,30 @@ def gaussian(alpha, x_0, p):
 
 
 
-def gaussian_normalize(alpha, gamma, x_0, p_0):
+def fixed_gaussian(alpha, x_0, p):
+    """
+
+    Parameters:
+    
+    alpha:alpha parameter of the gaussian
+    x_0: x_0 parameter of the gaussian
+    p: p parameter of the gaussian
+    
+    Returns:
+    
+    The moving gaussian wave function.
+    
     """
     
-    gaussian_normalize(alpha, gamma, x_0, p_0)
-    
+    alpha, x, x_0, p, h_b = symbols("alpha x x_0 p h_b")
+    return exp(-((alpha/2)*(x-x_0)**2))
+
+
+
+
+def moving_gaussian_normalized(alpha, gamma, x_0, p_0):
+    """
+
     Parameters:
     
     alpha: alpha parameter of the normalized gaussian
@@ -439,8 +440,6 @@ def gaussian_normalize(alpha, gamma, x_0, p_0):
 
 def conjugate(expr):
     """
-    
-    conjugate(expr)
 
     Parameters:
 
@@ -457,39 +456,35 @@ def conjugate(expr):
 
 
 
-def normalize_constant(WaveFunc, var, lower, upper):
+def normalize_constant(wavefunc, var, lower, upper):
     """
-    
-    normalize_constant(WaveFunc, var, lower, upper)
 
     Parameters:
 
-    WaveFunc: The WaveFunction/expression of interest
+    wavefunc: The WaveFunction/expression of interest
     var: What the integral is taken with respect to
     lower: The lower bound of the integral. If bounds are not listed, this is -oo
     upper: The upper bound of the integral. If bounds are not listed, this is oo
 
     Returns:
 
-    The normalization constant, with respect to the given parameters. To find the normalized WaveFunction, the output for NORMALIZE() must be multiplied by the original WaveFunction. A normalized WaveFunction indicates that the probability of finding a particle within certain bounds must be equal to one.
+    The normalization constant, with respect to the given parameters. To find the normalized WaveFunction, the output for normalize_constant() must be multiplied by the original WaveFunction. A normalized WaveFunction indicates that the probability of finding a particle within certain bounds must be equal to one.
 
     """
     
-    return 1/sqrt(Integral(WaveFunc*conjugate(WaveFunc), (var, lower, upper)))
+    return 1/sqrt(Integral(wavefunc*conjugate(wavefunc), (var, lower, upper)).doit().replace(sin(n*pi), 0).replace(cos(n*pi), 1))
 
 
 
 
-def expectation_value(WaveFunc_1, Operator, WaveFunc_2, var, lower, upper):
+def expectation_value(wavefunc_1, operator, wavefunc_2, var, lower, upper):
     """
-    
-    expectation_value(WaveFunc_1, Operator, WaveFunc_2, var, lower, upper)
 
     Parameters:
     
-    WaveFunc_1: The "bra" normalized WaveFunction
-    Operator: The operator of interest
-    WaveFunc_2: The "ket" normalized WaveFunction
+    wavefunc_1: The "bra" normalized WaveFunction
+    operator: The operator of interest
+    wavefunc_2: The "ket" normalized WaveFunction
     var: What the integral is taken with respect to
     lower: The lower bound of the integral. If bounds are not listed, this is -oo
     upper: The upper bound of the integral. If bounds are not listed, this is oo
@@ -507,20 +502,19 @@ def expectation_value(WaveFunc_1, Operator, WaveFunc_2, var, lower, upper):
     """
     
     
-    if B == kinetic_energy(x):
-        return sympify(str(sympify(str(Integral(conjugate(A)*B, (x, y, z))).replace(str(Derivative("1", x)**2), str(Derivative(A, x, x)))).doit()).replace(str('sin(pi*n)'), str(0)).replace(str('cos(pi*n)'), str(0)))
-    if B == p_operator(x):
-        return Integral(conjugate(A)*B, (x, y, z)).replace(Derivative("1", x), Derivative(A, x).doit()) 
+    if operator == kinetic_energy(x):
+        return sympify(str(sympify(str(Integral(conjugate(wavefunc_1)*operator, (var, lower, upper))).replace(str(Derivative("1", x)**2), str(Derivative(wavefunc_1, x, x)))).doit()).replace(str('sin(pi*n)'), str(0)).replace(str('cos(pi*n)'), str(0)))
+    if operator == p_operator(x):
+        return Integral(conjugate(wavefunc_1)*operator, (var, lower, upper)).replace(Derivative("1", x), Derivative(wavefunc_1, x).doit()) 
     else:
-        return Integral(conjugate(WaveFunc_1)*Operator*WaveFunc_2, (var, lower, upper))
+        return Integral(conjugate(wavefunc_1)*operator*wavefunc_2, (var, lower, upper)).doit().replace(sin(n*pi), 0).replace(cos(n*pi), 1)
+
 
 
 
 def overlap(WaveFunc_1, WaveFunc_2, var, lower, upper):
     """
-    
-    overlap(WaveFunc_1, WaveFunc_2, var, lower, upper)
-    
+
     Parameters:
     
     WaveFunc_1: The "bra" normalized WaveFunction
@@ -548,8 +542,6 @@ def overlap(WaveFunc_1, WaveFunc_2, var, lower, upper):
 
 def plot_function(func, B, lower, upper):
     """
-    
-    plot_function(func, B, lower, upper)
 
     Parameters:
 
@@ -574,8 +566,6 @@ def plot_function(func, B, lower, upper):
 
 def laguerre(r, n):
     """
-    
-    laguerre(r, n)
 
     Parameters:
 
@@ -584,7 +574,7 @@ def laguerre(r, n):
 
     Returns:
 
-    The Laguerre polynomial. This is commonly used to solve the LAGUERRE_ASSOC() function.
+    The Laguerre polynomial. This is commonly used to solve the laguerre_assoc() function.
 
     """
     
@@ -595,8 +585,6 @@ def laguerre(r, n):
 
 def laguerre_2(r, n):
     """
-    
-    laguerre_2(r, n)
 
     Parameters:
 
@@ -616,8 +604,6 @@ def laguerre_2(r, n):
 
 def laguerre_assoc(n, l):
     """
-    
-    laguerre_assoc(n, l)
 
     Parameters:
 
@@ -626,7 +612,7 @@ def laguerre_assoc(n, l):
 
     Returns:
 
-    The Laguerre Associated polynomial, commonly used to solve the RADIAL() function.
+    The Laguerre Associated polynomial, commonly used to solve the radial function.
 
     """
     
@@ -636,9 +622,7 @@ def laguerre_assoc(n, l):
 
 def kronecker(i, j):
     """
-    
-    kronecker(i, j)
-    
+
     Parameters:
     
     i: this is usually "i" and the first variable of the kronecker delta.
@@ -662,9 +646,7 @@ def kronecker(i, j):
 
 def spherical(expr):
     """
-    
-    spherical(expr)
-    
+
     Parameters:
     
     expr: The expression of interest to be changed into spherical coordinates
@@ -682,9 +664,7 @@ def spherical(expr):
 
 def L_2(j, m):
     """
-    
-    L_2(j, m)
-    
+
     Parameters:
     
     j: The total angular momentum quantum number
@@ -703,9 +683,7 @@ def L_2(j, m):
 
 def L_z(j, m):
     """
-    
-    L_z(j, m)
-    
+
     Parameters:
     
     j: The total angular momentum quantum number
@@ -724,9 +702,7 @@ def L_z(j, m):
 
 def L_raising_operator(j = None, m = None):
     """
-    
-    L_raising_operator(j = None, m = None)
-    
+
     Parameters:
     
     j: The total angular momentum quantum number
@@ -750,9 +726,7 @@ def L_raising_operator(j = None, m = None):
     
 def L_lowering_operator(j = None, m = None):
      """
-     
-     L_lowering_operator(j = None, m = None)
-    
+
      Parameters:
     
     j: The total angular momentum quantum number
@@ -776,9 +750,7 @@ def L_lowering_operator(j = None, m = None):
     
 def L_x(j = None, m = None):
      """
-    
-    L_x(j = None, m = None)
-    
+
     Parameters:
     
     j: The total angular momentum quantum number
