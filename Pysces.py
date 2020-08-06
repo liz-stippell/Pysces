@@ -297,25 +297,6 @@ def f(var):
 
 
 
-def HO():
-    """
-
-    Parameters:
-
-    Currently, there are no needed parameters for this equation.
-
-    Returns:
-
-    The Harmonic Oscillator Hamiltonian. Note that "p" is the linear momentum operator, and so the first term is the KINETIC_ENERGY() function mentioned above.
-
-    """
-    
-    p, k, m, x = symbols("p k m x")
-    return (p**2)/(2*m) + (1/2)*k*(x**2)
-
-
-
-
 def planewave(x):
     """
 
@@ -638,7 +619,118 @@ def kronecker(i, j):
         return 1
     else:
         return 0
+
     
+    
+    
+""" The following is for harmonic oscillators, ladder operators """
+
+def a_raising(A = None):
+    """
+    
+    Parameters:
+    
+    A: this is usually either empty, (no parameter), "normalized" for the normalized ladder operator, or a "symbol" for the symbolic representation of the parameter.
+    
+    Returns:
+    
+    Either the mathematic representation of the "a" raising operator (commonly used in harmonic oscillator problems), the normalized raising operator (in dirac notation), or the symbol notation of the operator.
+    
+    """
+    
+    h_b, m, omega, p, x, a_R, normalized, n, symbol = symbols("h_b m omega p x a_+ normalized n symbol")
+    if A == None:
+        return (1/sqrt(2*h_b*m*omega)*(-I*p + m*omega*x))
+    if A == normalized:
+        return Bra(str(n))*sqrt(n+1)*Ket(str(n+1))
+    if A == symbol:
+        return a_R
+
+
+    
+        
+def a_lowering(A = None):
+    """
+    
+    Parameters:
+    
+    A: this is usually either empty, (no parameter), "normalized" for the normalized ladder operator, or a "symbol" for the symbolic representation of the parameter.
+    
+    Returns:
+    
+    Either the mathematic representation of the "a" lowering operator (commonly used in harmonic oscillator problems), the normalized lowering operator (in dirac notation), or the symbol notation of the operator.
+    
+    """
+    
+    h_b, m, omega, p, x, a_L, normalized, n, symbol = symbols("h_b m omega p x a_- normalized n symbol")
+    if A == None:
+        return (1/sqrt(2*h_b*m*omega)*(I*p + m*omega*x)) 
+    if A == normalized:
+        return Bra(n)*sqrt(n)*Ket(n-1)
+    if A == symbol:
+        return a_L
+
+
+
+def x_ladder():
+    """
+    
+    Parameters:
+    
+    At this time, there are no parameters necessary.
+    
+    Returns:
+    
+    "x" with respect to the "a" raising/lowering operators
+    
+    """
+    
+    h_b, m, omega, symbol = symbols("h_b m omega symbol")
+    return (sqrt(h_b/(2*m*omega))*(a_raising(symbol)+a_lowering(symbol)))
+
+
+
+
+def simplify_ladder(expr):
+    """
+    
+    Parameters:
+    
+    expr: the expression of interest
+    
+    Returns:
+    
+    The simplified expression, replacing any a_rasing(symbol)**2 with 0, a_lowering(symbol)**2 with 0, and 2*a_raising(symbol)*a_lowering(symbol) with (2*n+1). 
+    
+    Please note that the code does not "understand" the difference between a_raising(symbol)*a_lowering(symbol) and a_lowering(symbol)*a_raising(symbol) which are mathematically different and produce different outcomes.
+    
+    """
+    symbol, n = symbols("symbol n")
+    return Bra(n)*(simplify(expand(simplify(expand(expr)))).replace((2*a_raising(symbol)*a_lowering(symbol)), (2*n+1)).replace(a_raising(symbol)**2, 0).replace(a_lowering(symbol)**2, 0))*Ket(n)
+
+
+
+
+def HO(condition = None):
+    """
+
+    Parameters:
+
+    condition: the condition of the harmonic oscillator. Examples include: "ground_state" or "ladder". This can also be left blank to give the general definition of a harmonic oscillator.
+
+    Returns:
+
+    The Harmonic Oscillator Hamiltonian. Note that "p" is the linear momentum operator, and so the first term is the kinetic_energy() function mentioned above.
+
+    """
+    
+    p, k, m, x, alpha, omega, h_b, ladder, ground_state, symbol = symbols("p k m x alpha omega h_b ladder ground_state symbol")
+    if condition == None:
+        return (p**2)/(2*m) + (1/2)*k*(x**2)
+    if condition == ladder:
+        return h_b*omega*(a_lowering(symbol)*a_raising(symbol)-(1/2))
+    if condition == ground_state:
+        return ((alpha/pi)**(1/4))*exp(-(1/2)*((m*omega)/h_b)*(x**2))
     
 
 """ The following are for Spherical Harmonics """
@@ -674,10 +766,16 @@ def L_2(j, m):
     
     The L^2 vector magnitude eigenvalue for spherical harmonics.
     
+    The following may be important notation:
+    Bra(str(j), str(","), str(m))*j*(j+1)*h_b**2*Ket(str(j), str(","), str(m))
+    
     """
     
     h_b = Symbol("h_b")
-    return Bra(str(j), str(","), str(m))*j*(j+1)*h_b**2*Ket(str(j), str(","), str(m))
+    if (str(j), str(","), str(m)) == (str(j), str(","), str(m)):
+        return j*(j+1)*h_b**2
+    else:
+        return 0 
 
 
 
@@ -693,10 +791,16 @@ def L_z(j, m):
     
     The L_z projection (in the z direction) eigenvalue for spherical harmonics.
     
+    The following may be important notation:
+    Bra(str(j), str(","), str(m))*m*h_b*Ket(str(j), str(","), str(m))
+    
     """
     
     h_b = Symbol("h_b")
-    return Bra(str(j), str(","), str(m))*m*h_b*Ket(str(j), str(","), str(m))
+    if (str(j), str(","), str(m)) == (str(j), str(","), str(m)):
+        return m*h_b
+    else:
+        return 0 
 
 
 
@@ -714,16 +818,21 @@ def L_raising_operator(j = None, m = None):
     
     Else, the formula for the raising operator is computed using Dirac notation
     
+    The following may be important notation:
+    Bra(str(j), str(","), str(m))*h_b*sqrt(j*(j+1)-m*(m+1))*Ket(str(j), str(','), str(m+1))
+    
     """
     
     L_x, L_y, h_b = symbols("L_x L_y h_b")
     if j == None and m == None:
         return Operator(L_x) + I*Operator(L_y)
+    if (str(j), str(","), str(m)) == (str(j), str(','), str(m+1)):
+        return h_b*sqrt(j*(j+1)-m*(m+1))
     else:
-        return Bra(str(j), str(","), str(m))*h_b*sqrt(j*(j+1)-m*(m+1))*Ket(str(j), str(','), str(m+1))
+        return 0 
 
     
-    
+
 def L_lowering_operator(j = None, m = None):
      """
 
@@ -738,13 +847,18 @@ def L_lowering_operator(j = None, m = None):
     
     Else, the formula for the lowering operator is computed using Dirac notation
     
+    The following may be important notation:
+    Bra(str(j), str(","), str(m))*h_b*sqrt(j*(j+1)-m*(m-1))*Ket(str(j), str(','), str(m-1))
+    
     """
         
      L_x, L_y, h_b = symbols("L_x L_y h_b")
      if j == None and m == None:
         return Operator(L_x) - I*Operator(L_y)
-     else:
-        return Bra(str(j), str(","), str(m))*h_b*sqrt(j*(j+1)-m*(m-1))*Ket(str(j), str(','), str(m-1))
+     if (str(j), str(","), str(m)) == (str(j), str(','), str(m-1)):
+        return h_b*sqrt(j*(j+1)-m*(m-1))
+     else: 
+        return 0 
 
 
     
