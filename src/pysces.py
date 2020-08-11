@@ -132,8 +132,11 @@ def comm_steps(commutator_1, commutator_2, aux):
         
     """
     
-    return display(Commutator(Operator(commutator_1), Operator(commutator_2))*aux), display(comm_1(Operator(commutator_1), Operator(commutator_2), aux)), display(expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('x'))) or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('y'))) or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('z'))))
-
+    return display(Commutator(Operator(commutator_1), Operator(commutator_2))*aux),\
+                    display(comm_1(Operator(commutator_1), Operator(commutator_2), aux)),\
+                            display(expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('x'))) \
+                            or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('y'))) \
+                            or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('z'))) )
 
 
 
@@ -436,8 +439,18 @@ def normalize_constant(wavefunc, var, lower, upper):
     The normalization constant, with respect to the given parameters. To find the normalized WaveFunction, the output for normalize_constant() must be multiplied by the original WaveFunction. A normalized WaveFunction indicates that the probability of finding a particle within certain bounds must be equal to one.
 
     """
+    nreps = 2
+    initial = [ sin(n*pi), cos(n*pi)]
+    final = [0, 1]
+
+    res = 1/sqrt(Integral(wavefunc*conjugate(wavefunc), (var, lower, upper)).doit())
+
+    for i in range(nreps):
+        res = res.replace(initial[i], final[i])
+     
+    return simplify( res )
     
-    return 1/sqrt(Integral(wavefunc*conjugate(wavefunc), (var, lower, upper)).doit().replace(sin(n*pi), 0).replace(cos(n*pi), 1))
+    #return simplify( 1/sqrt(Integral(wavefunc*conjugate(wavefunc), (var, lower, upper)).doit().replace(sin(n*pi), 0).replace(cos(n*pi), 1)) )
 
 
 
@@ -683,15 +696,14 @@ def simplify_ladder(expr):
 
 
 def HO(condition = None):
-    """
-
-    Parameters:
-
-    condition: the condition of the harmonic oscillator. Examples include: "ground_state" or "ladder". This can also be left blank to give the general definition of a harmonic oscillator.
+    """    
+    Args:
+        condition: the condition of the harmonic oscillator. Examples include: "ground_state" or "ladder". 
+            This can also be left blank to give the general definition of a harmonic oscillator.
 
     Returns:
-
-    The Harmonic Oscillator Hamiltonian. Note that "p" is the linear momentum operator, and so the first term is the kinetic_energy() function mentioned above.
+        The Harmonic Oscillator Hamiltonian. Note that "p" is the linear momentum operator, and so the 
+        first term is the kinetic_energy() function mentioned above.
 
     """
     
