@@ -691,6 +691,27 @@ def x_ladder():
 
 
 
+def p_ladder(var = None):
+    """
+    
+    Parameters:
+    
+    var: the variable that the linear momentum operator is with respect to. Please note that no matter the answer, the output is the same.
+    
+    Returns:
+    
+    "p" operator (linear momentum operator) with respect to the "a" raising/lowering operators
+    
+    """
+    h_b, m, omega, symbol = symbols("h_b m omega symbol")
+    if var == None:
+        return (a_lowering(symbol) - a_raising(symbol))*((2*I)/sqrt(2*h_b*m*omega))
+    else:
+        return (a_lowering(symbol) - a_raising(symbol))*((2*I)/sqrt(2*h_b*m*omega))
+
+
+
+
 def simplify_ladder(expr):
     """
     
@@ -804,13 +825,13 @@ def L_z(j, m):
 
 
 
-def L_raising_operator(j = None, m = None):
+def L_raising(var_1 = None, var_2 = None):
     """
 
     Parameters:
     
-    j: The total angular momentum quantum number
-    m: The magnetic quantum number
+    var_1: The total angular momentum quantum number
+    var_2: The magnetic quantum number
     
     Returns:
     
@@ -818,22 +839,21 @@ def L_raising_operator(j = None, m = None):
     
     Else, the formula for the raising operator is computed using Dirac notation
     
-    The following may be important notation:
-    Bra(str(j), str(","), str(m))*h_b*sqrt(j*(j+1)-m*(m+1))*Ket(str(j), str(','), str(m+1))
-    
     """
     
-    L_x, L_y, h_b = symbols("L_x L_y h_b")
-    if j == None and m == None:
+    L_x, L_y, h_b, j, m = symbols("L_x L_y h_b j m")
+    if var_1 == None and var_2 == None:
         return Operator(L_x) + I*Operator(L_y)
-    if (str(j), str(","), str(m)) == (str(j), str(','), str(m+1)):
-        return h_b*sqrt(j*(j+1)-m*(m+1))
+    if (str(var_1), str(","), str(var_2)) == (str(var_1), str(','), str(var_2+1)):
+        return h_b*sqrt(var_1*(var_1+1)-var_2*(var_2+1))
+    if var_1 == j and var_2 == m:
+        return Bra(str(var_1), str(","), str(var_2))*h_b*sqrt(var_1*(var_1+1)-var_2*(var_2+1))*Ket(str(var_1), str(','), str(var_2+1))
     else:
-        return 0 
+        return 0
 
     
 
-def L_lowering_operator(j = None, m = None):
+def L_lowering(var_1 = None, var_2 = None):
      """
 
      Parameters:
@@ -853,10 +873,12 @@ def L_lowering_operator(j = None, m = None):
     """
         
      L_x, L_y, h_b = symbols("L_x L_y h_b")
-     if j == None and m == None:
+     if var_1 == None and var_2 == None:
         return Operator(L_x) - I*Operator(L_y)
-     if (str(j), str(","), str(m)) == (str(j), str(','), str(m-1)):
-        return h_b*sqrt(j*(j+1)-m*(m-1))
+     if (str(var_1), str(","), str(var_2)) == (str(var_1), str(','), str(var_2-1)):
+        return h_b*sqrt(var_1*(var_1+1)-var_2*(var_2-1))
+     if var_1 == j and var_2 == m:
+        return Bra(str(var_1), str(","), str(var_2))*h_b*sqrt(var_1*(var_1+1)-var_2*(var_2-1))*Ket(str(var_1), str(','), str(var_2-1)) 
      else: 
         return 0 
 
@@ -882,7 +904,7 @@ def L_x(j = None, m = None):
         L_R, L_L = symbols("L_+ L_-")
         return (1/2)*(L_R + L_L)
      else:
-        return (1/2)*(L_raising_operator(j, m) + L_lowering_operator(j, m))
+        return (1/2)*(L_raising(j, m) + L_lowering(j, m))
     
 # In[ ]:
 
