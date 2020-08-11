@@ -1,0 +1,27 @@
+name: py37
+channels:
+dependencies:
+    # Base depends
+  - python
+  - pip
+  - make
+  - cmake
+
+  # Docs
+  - sphinx
+  - sphinx_rtd_theme
+  - recommonmark
+
+    # Testing
+  - pytest
+  - pytest-cov
+  - codecov
+
+    # Pip-only installs
+  #- pip:
+  #  - codecov
+
+  # Dependencies
+  - sympy
+  - numpy
+  - matplotlib

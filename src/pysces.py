@@ -17,18 +17,15 @@ I = sqrt(-1)
 
 def comm_1(commutator_1, commutator_2, aux):
     """
-
     This function is not used directly, it is only used in the comm() function below. 
 
-    Parameters:
-
-    commutator_1: The first operator in the commutator
-    commutator_2: The second operator in the commutator
-    aux: The auxiliary function. This is defined below, as F(x).
+    Args:
+        commutator_1: The first operator in the commutator
+        commutator_2: The second operator in the commutator
+        aux: The auxiliary function. This is defined below, as F(x).
 
     Returns:
-
-    The commutator of commutator_1 and commutator_2 with respect to the auxiliary function.
+        The commutator of commutator_1 and commutator_2 with respect to the auxiliary function.
 
     """
     
@@ -40,26 +37,22 @@ def comm_1(commutator_1, commutator_2, aux):
 def comm(commutator_1, commutator_2, aux):
     L_z, L_y, L_x = symbols("L_z, L_y, L_x")
     """
-
     This function has a few different outputs, depending on the parameters.
 
-    Parameters:
-
-    commutator_1: the first operator
-    commutator_2: the second operator
-    aux: the auxiliary function
+    Args:
+        commutator_1: the first operator
+        commutator_2: the second operator
+        aux: the auxiliary function
 
     Returns:
-
-    This function automatically returns a solved commutator. For more complicated commutators involving the angular momentum operators (L_z, L_y, L_x), please make sure that the correct notation is being used (ex: if you want the angular momentum operator in the "x" direction, please use "L_x"
+        This function automatically returns a solved commutator. For more complicated commutators involving the angular momentum operators (L_z, L_y, L_x), please make sure that the correct notation is being used (ex: if you want the angular momentum operator in the "x" direction, please use "L_x"
     
     
-    Please note the following may be helpful:
-    
-    x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
-    L_z = x*p_y - y*p_x
-    L_y = z*p_x - x*p_z
-    L_x = y*p_z - z*p_y
+    Note:    
+        x, p_y, y, p_x, z, p_z, L_z, L_y, L_x = symbols("x, p_y, y, p_x, z, p_z, L_z, L_y, L_x")
+        L_z = x*p_y - y*p_x
+        L_y = z*p_x - x*p_z
+        L_x = y*p_z - z*p_y
 
     """
     
@@ -108,16 +101,12 @@ def comm(commutator_1, commutator_2, aux):
     
 def factorization(expr, var):
     """
-
-    Parameters:
-    
-    expr: the expression of interest
-    var: the variable of interest. This is most likely going to be the same variable used in the auxiliary function.
-    
-    
-    Returns:
-    
-    The simplified commutator. This is only used when both of the operators in the commutator are angular momentum operators.
+    Args:    
+        expr: the expression of interest
+        var: the variable of interest. This is most likely going to be the same variable used in the auxiliary function.
+        
+    Returns:    
+        The simplified commutator. This is only used when both of the operators in the commutator are angular momentum operators.
     
     """
     
@@ -129,23 +118,18 @@ def factorization(expr, var):
     if var == x:
         return comm(Operator(x), p_operator(x), f(x))*L_x
 
-    
-    
+        
     
 def comm_steps(commutator_1, commutator_2, aux):
     """
-
-    Parameters:
+    Args:    
+        commutator_1: the first operator
+        commutator_2: the second operator
+        aux: the auxiliary function
     
-    commutator_1: the first operator
-    commutator_2: the second operator
-    aux: the auxiliary function
-    
-    Returns:
-    
-    Three main steps used to solve a commutator. The first is the printed commutator in brackets, the second is the expansion, and the third output will be the answer. Please note that as of now, the code does not understand the addition/subtraction/multiplication/division of commutators, and so if there are multiple commutators in a line (ex: comm_steps(comm(A, B) - comm(C, D))) the code will not process this and therefore each individual commutator needs to have its own line.
-    
-    
+    Returns:    
+        Three main steps used to solve a commutator. The first is the printed commutator in brackets, the second is the expansion, and the third output will be the answer. Please note that as of now, the code does not understand the addition/subtraction/multiplication/division of commutators, and so if there are multiple commutators in a line (ex: comm_steps(comm(A, B) - comm(C, D))) the code will not process this and therefore each individual commutator needs to have its own line.
+        
     """
     
     return display(Commutator(Operator(commutator_1), Operator(commutator_2))*aux), display(comm_1(Operator(commutator_1), Operator(commutator_2), aux)), display(expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('x'))) or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('y'))) or expression_replace(comm_1(Operator(commutator_1), Operator(commutator_2), aux), sympify(str('z'))))
@@ -460,25 +444,20 @@ def normalize_constant(wavefunc, var, lower, upper):
 
 def expectation_value(wavefunc_1, operator, wavefunc_2, var, lower, upper):
     """
+    Computes a symbolic expression for an expectation value of an operator `operator`
+    with the two wavefunctions: `<WaveFunc_1|operator|WaveFunc_2>` 
 
-    Parameters:
+    Args:    
+        wavefunc_1: The "bra" normalized WaveFunction
+        operator: The operator of interest
+        wavefunc_2: The "ket" normalized WaveFunction
+        var: What the integral is taken with respect to
+        lower: The lower bound of the integral. If bounds are not listed, this is -oo
+        upper: The upper bound of the integral. If bounds are not listed, this is oo
     
-    wavefunc_1: The "bra" normalized WaveFunction
-    operator: The operator of interest
-    wavefunc_2: The "ket" normalized WaveFunction
-    var: What the integral is taken with respect to
-    lower: The lower bound of the integral. If bounds are not listed, this is -oo
-    upper: The upper bound of the integral. If bounds are not listed, this is oo
-    
-    For reference:
-    <bra|
-    |ket>
-    so:
-    <WaveFunc_1|Operator|WaveFunc_2>
-
     Returns:
-
-    The expectation value for the given operator and normalized WaveFunction. An expectation value is the average value of an operator for a given WaveFunction. 
+        The expectation value for the given operator and normalized WaveFunction. 
+        An expectation value is the average value of an operator for a given WaveFunction. 
 
     """
     
@@ -495,24 +474,17 @@ def expectation_value(wavefunc_1, operator, wavefunc_2, var, lower, upper):
 
 def overlap(WaveFunc_1, WaveFunc_2, var, lower, upper):
     """
+    Computes a symbolic expression for an overlap of two functions, `<WaveFunc_1|WaveFunc_2>`
 
-    Parameters:
-    
-    WaveFunc_1: The "bra" normalized WaveFunction
-    WaveFunc_2: The "ket" normalized WaveFunction
-    var: What the integral is taken with respect to
-    lower: The lower bound of the integral. If bounds are not listed, this is -oo
-    upper: The upper bound of the integral. If bounds are not listed, this is oo 
-    
-    For reference:
-    <bra|
-    |ket>
-    so:
-    <WaveFunc_1|WaveFunc_2>
-    
-    Returns:
-    
-    The overlap of the two WaveFunctions of interest over given bounds. Note that if these are the same WaveFunctions, the overlap is 1.
+    Args:    
+        WaveFunc_1: The "bra" normalized WaveFunction
+        WaveFunc_2: The "ket" normalized WaveFunction
+        var: What the integral is taken with respect to
+        lower: The lower bound of the integral. If bounds are not listed, this is -oo
+        upper: The upper bound of the integral. If bounds are not listed, this is oo 
+        
+    Returns:    
+        The overlap of the two WaveFunctions of interest over given bounds. 
     
     """
     
@@ -650,15 +622,14 @@ def a_raising(A = None):
     
         
 def a_lowering(A = None):
-    """
+    """    
+    Args:
+        A: this is usually either empty, (no parameter), "normalized" for the normalized ladder operator,
+        or a "symbol" for the symbolic representation of the parameter.
     
-    Parameters:
-    
-    A: this is usually either empty, (no parameter), "normalized" for the normalized ladder operator, or a "symbol" for the symbolic representation of the parameter.
-    
-    Returns:
-    
-    Either the mathematic representation of the "a" lowering operator (commonly used in harmonic oscillator problems), the normalized lowering operator (in dirac notation), or the symbol notation of the operator.
+    Returns:    
+        Either the mathematic representation of the "a" lowering operator (commonly used in harmonic oscillator problems),
+        the normalized lowering operator (in dirac notation), or the symbol notation of the operator.
     
     """
     
@@ -756,18 +727,15 @@ def spherical(expr):
 
 def L_2(j, m):
     """
-
-    Parameters:
+    Args:    
+        j: The total angular momentum quantum number
+        m: The magnetic quantum number
     
-    j: The total angular momentum quantum number
-    m: The magnetic quantum number
+    Returns:    
+        The L^2 vector magnitude eigenvalue for spherical harmonics.
     
-    Returns:
-    
-    The L^2 vector magnitude eigenvalue for spherical harmonics.
-    
-    The following may be important notation:
-    Bra(str(j), str(","), str(m))*j*(j+1)*h_b**2*Ket(str(j), str(","), str(m))
+    Note:
+        Bra(str(j), str(","), str(m))*j*(j+1)*h_b**2*Ket(str(j), str(","), str(m))
     
     """
     
@@ -781,18 +749,15 @@ def L_2(j, m):
 
 def L_z(j, m):
     """
-
-    Parameters:
+    Args:    
+        j: The total angular momentum quantum number
+        m: The magnetic quantum number
     
-    j: The total angular momentum quantum number
-    m: The magnetic quantum number
+    Returns:    
+        The L_z projection (in the z direction) eigenvalue for spherical harmonics.
     
-    Returns:
-    
-    The L_z projection (in the z direction) eigenvalue for spherical harmonics.
-    
-    The following may be important notation:
-    Bra(str(j), str(","), str(m))*m*h_b*Ket(str(j), str(","), str(m))
+    Note:
+        Bra(str(j), str(","), str(m))*m*h_b*Ket(str(j), str(","), str(m))
     
     """
     
@@ -806,21 +771,20 @@ def L_z(j, m):
 
 def L_raising_operator(j = None, m = None):
     """
+    Args:    
+        j: The total angular momentum quantum number
+        m: The magnetic quantum number
+    
+    Returns:    
+        If j == None and m == None, the general formula for the raising operator for spherical harmonics is returned.    
+        Else, the formula for the raising operator is computed using Dirac notation
+    
+    Note:
+        Bra(str(j), str(","), str(m))*h_b*sqrt(j*(j+1)-m*(m+1))*Ket(str(j), str(','), str(m+1))
 
-    Parameters:
-    
-    j: The total angular momentum quantum number
-    m: The magnetic quantum number
-    
-    Returns:
-    
-    If j == None and m == None, the general formula for the raising operator for spherical harmonics is returned.
-    
-    Else, the formula for the raising operator is computed using Dirac notation
-    
-    The following may be important notation:
-    Bra(str(j), str(","), str(m))*h_b*sqrt(j*(j+1)-m*(m+1))*Ket(str(j), str(','), str(m+1))
-    
+        .. math::
+          \\langle j, m | \\hbar \\sqrt{ j (j+1) - m (m+1) }  | j, m+1 \\rangle
+        
     """
     
     L_x, L_y, h_b = symbols("L_x L_y h_b")
@@ -834,58 +798,46 @@ def L_raising_operator(j = None, m = None):
     
 
 def L_lowering_operator(j = None, m = None):
-     """
-
-     Parameters:
+    """
+    Args:    
+        j: The total angular momentum quantum number
+        m: The magnetic quantum number
     
-    j: The total angular momentum quantum number
-    m: The magnetic quantum number
+    Returns:    
+        If j == None and m == None, the general formula for the lowering operator for spherical harmonics is returned.    
+        Else, the formula for the lowering operator is computed using Dirac notation
     
-    Returns:
-    
-    If j == None and m == None, the general formula for the lowering operator for spherical harmonics is returned.
-    
-    Else, the formula for the lowering operator is computed using Dirac notation
-    
-    The following may be important notation:
-    Bra(str(j), str(","), str(m))*h_b*sqrt(j*(j+1)-m*(m-1))*Ket(str(j), str(','), str(m-1))
+    Note:
+        Bra(str(j), str(","), str(m))*h_b*sqrt(j*(j+1)-m*(m-1))*Ket(str(j), str(','), str(m-1))
     
     """
         
-     L_x, L_y, h_b = symbols("L_x L_y h_b")
-     if j == None and m == None:
-        return Operator(L_x) - I*Operator(L_y)
-     if (str(j), str(","), str(m)) == (str(j), str(','), str(m-1)):
-        return h_b*sqrt(j*(j+1)-m*(m-1))
-     else: 
-        return 0 
+    L_x, L_y, h_b = symbols("L_x L_y h_b")
+    if j == None and m == None:
+       return Operator(L_x) - I*Operator(L_y)
+    if (str(j), str(","), str(m)) == (str(j), str(','), str(m-1)):
+       return h_b*sqrt(j*(j+1)-m*(m-1))
+    else: 
+       return 0 
 
 
     
 def L_x(j = None, m = None):
-     """
-
-    Parameters:
+    """
+    Args:    
+        j: The total angular momentum quantum number
+        m: The magnetic quantum number
     
-    j: The total angular momentum quantum number
-    m: The magnetic quantum number
-    
-    Returns:
-    
-    If j == None and m == None, the general formula for the L_x operator for spherical harmonics is returned.
-    
-    Else, the formula for the L_x operator is computed using Dirac notation
+    Returns:    
+        If j == None and m == None, the general formula for the L_x operator for spherical harmonics is returned.    
+        Else, the formula for the L_x operator is computed using Dirac notation
     
     """
         
-     if j == None and m == None:
-        L_R, L_L = symbols("L_+ L_-")
-        return (1/2)*(L_R + L_L)
-     else:
-        return (1/2)*(L_raising_operator(j, m) + L_lowering_operator(j, m))
+    if j == None and m == None:
+       L_R, L_L = symbols("L_+ L_-")
+       return (1/2)*(L_R + L_L)
+    else:
+       return (1/2)*(L_raising_operator(j, m) + L_lowering_operator(j, m))
     
-# In[ ]:
-
-
-
 
