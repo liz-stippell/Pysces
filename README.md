@@ -1,5 +1,10 @@
 # Pysces
 
+[![Build Status](https://travis-ci.org/Quantum-Dynamics-Hub/pysces.svg?branch=master)](https://travis-ci.org/Quantum-Dynamics-Hub/pysces)
+
+
+## About
+
 This is experimental code for quantum mechanics, in order to be used for teaching purpose.
 
 The Pysces library created uses Sympy and Matplotlib libraries as a backend. This library is still in progress.
@@ -35,6 +40,13 @@ heisenberg_EOM    (Heisenberg Equation of Motion - in progress)
 gaussian_wavepackets (Gaussian Wave Packets - in progress)
 
 ___________________________________________________________________________________________________________________________________
+
+## Documentation
+
+The documentation is available [here](https://quantum-dynamics-hub.github.io/pysces/index.html)
+
+
+## Authors
 
 This code is created by Elizabeth Stippell, Lauryn Jerz under the guidance of Dr. Alexey Akimov at the University at Buffalo
 
