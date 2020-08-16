@@ -1,0 +1,73 @@
+# This will run on Travis' 'new' container-based infrastructure
+#sudo: false
+
+# Blacklist
+#branches:
+#  only:
+#    - master
+
+# Environment variables
+env:
+  global:
+    - GH_REPO_REF: github.com/Quantum-Dynamics-Hub/pysces.git
+
+language: python
+
+
+
+matrix:
+  include:
+    - os: linux
+      language: generic
+      env: PYTHON_VER=3.7
+
+
+# Install dependencies
+addons:
+  apt:
+    packages:
+      - graphviz
+
+before_install:
+    # Additional info about the build
+  - uname -a
+  - df -h
+  - ulimit -a
+
+    # Install the Python environment
+  - source devtools/travis-ci/before_install.sh
+  - python -V
+
+
+install:
+
+    # Create test environment for package
+  - python devtools/scripts/create_conda_env.py -n=py37 -p=$PYTHON_VER devtools/conda-envs/py37_env.yaml
+    # Activate the test environment
+  - conda activate py37
+    # Build and install package
+    #- python setup.py develop --no-deps
+
+  - pwd
+  - mkdir _build
+  - cd _build
+  - cmake -DBOOST_ROOT=$HOME/miniconda3/envs/py37 ../  
+  - make -j`nproc`
+  #- make copy-libra-py
+  - export PYTHONPATH=$(pwd)/src:$PYTHONPATH
+  - export LD_LIBRARY_PATH=$(pwd)/src:$LD_LIBRARY_PATH
+  - cd ../docs/SphinxDoc
+  - make html
+
+  
+
+# Deploy using travis builtin GitHub Pages support
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: $TRAVIS_BUILD_DIR/docs/SphinxDoc/build/html
+  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+  on:
+    branch: 
+      - master
+      - devel
