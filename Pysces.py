@@ -376,14 +376,13 @@ def moving_gaussian(alpha, x_0, p):
 
 
 
-def fixed_gaussian(alpha, x_0, p):
+def fixed_gaussian(alpha, x_0):
     """
 
     Parameters:
     
     alpha:alpha parameter of the gaussian
     x_0: x_0 parameter of the gaussian
-    p: p parameter of the gaussian
     
     Returns:
     
@@ -391,7 +390,7 @@ def fixed_gaussian(alpha, x_0, p):
     
     """
     
-    alpha, x, x_0, p, h_b = symbols("alpha x x_0 p h_b")
+    alpha, x, h_b = symbols("alpha x h_b")
     return exp(-((alpha/2)*(x-x_0)**2))
 
 
