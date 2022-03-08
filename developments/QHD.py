@@ -29,27 +29,29 @@ def QHD_int(n, order, dt):
     if n == x and order == 2:
         xp, mass, p, alpha, x2 = symbols("xp, mass, p, alpha, x2")
         return -2.0*alpha*dt*x*(-p*x + xp)/mass + (-2.0*alpha*dt*x*(-p*x + xp)/mass + x2)*exp(-2.0*alpha*dt*p/mass)
+#    if order != 1:
+#        return N(sympify(f"{n}{order} + " + str(time_deriv(n, order)*dt).replace("hbar*i", "1").replace("I", "1").replace("f(q)", "1").replace("hbar**2*i**2*Derivative(1, q)", "p").replace("hbar**2*i**2", "1")))
     else:
         return N(sympify(str(n**order + time_deriv(n, order)*dt).replace("hbar*i", "1").replace("I", "1").replace("f(q)", "1").replace("hbar**2*i**2*Derivative(1, q)", "p").replace("hbar**2*i**2", "1")))
 
 def QHD_kinetic(var = None):
     return QHD_int(p, 2)/(2*m)
 
-def QHD_morse(form):
-    x, x2, D, dt, q = symbols("x, x2, D, dt, q")
-    x = exp(-alpha*q)
-    
-    if form == x:
-        return D*(x2 - 2*x**2)
-    if form == e:
-        return D*(exp(-2*alpha*q) - 2*exp(-alpha*q))
+#def QHD_morse(form):
+#    x, x2, D, dt, q = symbols("x, x2, D, dt, q")
+#    x = exp(-alpha*q)
+#    
+#    if form == x:
+#        return D*(x2 - 2*x**2)
+#    if form == e:
+#        return D*(exp(-2*alpha*q) - 2*exp(-alpha*q))
 
 
-def QHD_ham(form):
+#def QHD_ham(form):
+#    
+#    return QHD_kinetic(var = None) + QHD_morse(form)
     
-    return QHD_kinetic(var = None) + QHD_morse(form)
     
-        
 def time_deriv1(var, order = 1):
     pq_s = Symbol("pq_s")
     aux = Operator(Function("f")(q))
@@ -68,6 +70,7 @@ def time_deriv1(var, order = 1):
     else:
         h1 = str(expand(((Commutator(ham(p, q), Operator(var**(order))).expand(commutator=True))*aux).doit()))
         h1 = h1.replace("pq_s", "((p*q+q*p))/2")
+
 
     
     start_points = []
@@ -173,12 +176,19 @@ def time_deriv1(var, order = 1):
         string = string.replace("(*", "(")
     s = sympify(string)
     s1 = expand(s.doit())
+    if var == p:
+        repl = 1
+        if order == 2:
+            s1 = s1/2
+    else:
+        repl = 0
+    s2 = str(s1).replace("hbar*i", "1").replace("I", "1").replace("f(q)", f"{repl}").replace(f"hbar**2*i**2*Derivative({repl}, q)", "p").replace(f"Derivative({repl}, q)", "p").replace("hbar**2*i**2", "1").replace("Derivative(v(q), (q, 2))", "0")
   
         
     if var == V:
         return sympify(der)    #/(i*hbar)
     else:
-        return s1              #/(i*hbar)
+        return sympify(s2)              #/(i*hbar)
 
 
 def time_deriv(var, order = 1):
