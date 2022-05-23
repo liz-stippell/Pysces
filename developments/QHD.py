@@ -23,34 +23,17 @@ def QHD_int(n, order, dt):
     if n == xp:
         p2, alpha= symbols("p2, alpha")
         return 0.5*dt*(2.0*D*alpha*(x*(-2*x**2 + 3.0*x2) - x2) - alpha*x*(-2.0*p**2 + p2)/mass) + (0.5*dt*(2.0*D*alpha*(x*(-2*x**2 + 3.0*x2) - x2) - alpha*x*(-2.0*p**2 + p2)/mass) + xp)*exp(-2.0*alpha*dt*p/mass)
-    if n == x and order == 1:
-        xp, mass, alpha = symbols("xp, mass, alpha")
-        return -alpha*dt*xp/mass + x
+#    if n == x and order == 1:
+#        xp, mass, alpha = symbols("xp, mass, alpha")
+#        return -alpha*dt*xp/mass + x
     if n == x and order == 2:
         xp, mass, p, alpha, x2 = symbols("xp, mass, p, alpha, x2")
         return -2.0*alpha*dt*x*(-p*x + xp)/mass + (-2.0*alpha*dt*x*(-p*x + xp)/mass + x2)*exp(-2.0*alpha*dt*p/mass)
-#    if order != 1:
-#        return N(sympify(f"{n}{order} + " + str(time_deriv(n, order)*dt).replace("hbar*i", "1").replace("I", "1").replace("f(q)", "1").replace("hbar**2*i**2*Derivative(1, q)", "p").replace("hbar**2*i**2", "1")))
     else:
         return N(sympify(str(n**order + time_deriv(n, order)*dt).replace("hbar*i", "1").replace("I", "1").replace("f(q)", "1").replace("hbar**2*i**2*Derivative(1, q)", "p").replace("hbar**2*i**2", "1")))
 
 def QHD_kinetic(var = None):
-    return QHD_int(p, 2)/(2*m)
-
-#def QHD_morse(form):
-#    x, x2, D, dt, q = symbols("x, x2, D, dt, q")
-#    x = exp(-alpha*q)
-#    
-#    if form == x:
-#        return D*(x2 - 2*x**2)
-#    if form == e:
-#        return D*(exp(-2*alpha*q) - 2*exp(-alpha*q))
-
-
-#def QHD_ham(form):
-#    
-#    return QHD_kinetic(var = None) + QHD_morse(form)
-    
+    return QHD_int(p, 2)/(2*m)   
     
 def time_deriv1(var, order = 1):
     pq_s = Symbol("pq_s")
@@ -193,3 +176,9 @@ def time_deriv1(var, order = 1):
 
 def time_deriv(var, order = 1):
     return time_deriv1(var, order)#/(i*hbar)
+
+def symmetrize(expr):
+    p, x2, x, px, xp = symbols("p, x2, x, px, xp")
+    expr1 = str(expr)
+    expr1 = expr1.replace("p*x2", "(x2*p-2*x*x*p+2*x*px)").replace("p*x", "xp").replace("px", "xp")
+    return sympify(expr1)
