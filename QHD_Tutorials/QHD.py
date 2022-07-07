@@ -20,12 +20,7 @@ def ham(p, q):
 
 def QHD_int(n, order, dt):
     xp, mass, p, alpha, x2 = symbols("xp, mass, p, alpha, x2")
-    if n == xp:
-        p2, alpha= symbols("p2, alpha")
-        return 0.5*dt*(2.0*D*alpha*(x*(-2*x**2 + 3.0*x2) - x2) - alpha*x*(-2.0*p**2 + p2)/mass) + (0.5*dt*(2.0*D*alpha*(x*(-2*x**2 + 3.0*x2) - x2) - alpha*x*(-2.0*p**2 + p2)/mass) + xp)*exp(-2.0*alpha*dt*p/mass)
-#    if n == x and order == 1:
-#        xp, mass, alpha = symbols("xp, mass, alpha")
-#        return -alpha*dt*xp/mass + x
+
     if n == x and order == 2:
         xp, mass, p, alpha, x2 = symbols("xp, mass, p, alpha, x2")
         return -2.0*alpha*dt*x*(-p*x + xp)/mass + (-2.0*alpha*dt*x*(-p*x + xp)/mass + x2)*exp(-2.0*alpha*dt*p/mass)
@@ -162,7 +157,7 @@ def time_deriv1(var, order = 1):
     if var == p:
         repl = 1
         if order == 2:
-            s1 = s1/2
+            s1 = -s1/2
     else:
         repl = 0
     s2 = str(s1).replace("hbar*i", "1").replace("I", "1").replace("f(q)", f"{repl}").replace(f"hbar**2*i**2*Derivative({repl}, q)", "p").replace(f"Derivative({repl}, q)", "p").replace("hbar**2*i**2", "1").replace("Derivative(v(q), (q, 2))", "0")
