@@ -1,5 +1,11 @@
 """ QHD Natural Variables Derivation """
 
+# importing sys
+import sys
+ 
+# adding Folder_2 to the system path
+sys.path.insert(0, '../src')
+
 from pysces import lin_mom
 from sympy import Symbol, symbols, Function, init_printing, Integral, Derivative, sympify, expand, sqrt, sin, cos, pi, simplify, exp
 from sympy.physics.quantum import Commutator, Operator, Bra, Ket
