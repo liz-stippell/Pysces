@@ -4,7 +4,7 @@
 # In[3]:
 
 
-from sympy import Symbol, symbols, Function, init_printing, Integral, Derivative, sympify, expand, sqrt, sin, cos, pi, simplify, exp
+from sympy import Symbol, symbols, Function, init_printing, Integral, integrate, Derivative, sympify, expand, sqrt, sin, cos, pi, simplify, exp
 from sympy.physics.quantum import Commutator, Operator, Bra, Ket
 from sympy.plotting import plot, plot3d
 from sympy.abc import *
@@ -558,9 +558,9 @@ def normalization_constant(wavefunc, lower, upper, var1, var2 = None):
         The double integration only works if they are integrated over the same bounds. 
 
     """
-    nreps = 2
-    initial = [ sin(n*pi), cos(n*pi)]
-    final = [0, 1]
+    nreps = 4
+    initial = [ sin(n*pi), cos(n*pi), sin(2*pi*n), cos(2*pi*n)]
+    final = [0, 1, 0, 1]
 
     res = 1/sqrt(Integral(wavefunc*conjugate(wavefunc), (var1, lower, upper)).doit())
 
@@ -570,9 +570,8 @@ def normalization_constant(wavefunc, lower, upper, var1, var2 = None):
         res2 = 1/sqrt(Integral(wavefunc*conjugate(wavefunc), (var1, lower, upper), (var2, lower, upper)).doit())
 
     for i in range(nreps):
-        res = res.replace(initial[i], final[i])
-        res2 = res2.replace(initial[i], final[i])
-        return simplify( res2 )
+        res = res.replace(initial[i], final[i]).replace("sin(2*pi*n)", "0")
+        return simplify( res )
     # n = Symbol("n")
     # return simplify( 1/sqrt(Integral(wavefunc*conjugate(wavefunc), (var, lower, upper)).doit().replace(sin(n*pi), 0).replace(cos(n*pi), 1)) )
 
