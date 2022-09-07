@@ -565,13 +565,13 @@ def normalization_constant(wavefunc, lower, upper, var1, var2 = None):
     res = 1/sqrt(Integral(wavefunc*conjugate(wavefunc), (var1, lower, upper)).doit())
 
     if var2 == None:
-        return simplify(res)
+        res = sympify(str(simplify(res)))#.replace("sin(2*pi*n)", "0"))
     else:
-        res2 = 1/sqrt(Integral(wavefunc*conjugate(wavefunc), (var1, lower, upper), (var2, lower, upper)).doit())
+        res = 1/sqrt(Integral(wavefunc*conjugate(wavefunc), (var1, lower, upper), (var2, lower, upper)).doit())
 
     for i in range(nreps):
-        res = res.replace(initial[i], final[i]).replace("sin(2*pi*n)", "0")
-        return simplify( res )
+        res = res.replace(initial[i], final[i])#.replace("sin(2*pi*n)", "0")
+        return sympify( str(res) .replace("sin(2*pi*n)", "0"))
     # n = Symbol("n")
     # return simplify( 1/sqrt(Integral(wavefunc*conjugate(wavefunc), (var, lower, upper)).doit().replace(sin(n*pi), 0).replace(cos(n*pi), 1)) )
 
